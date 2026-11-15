@@ -1,0 +1,8 @@
+# Keep build artefacts, virtualenvs and local databases out of the image.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.git/
+samples/*/verification.json
+*.log

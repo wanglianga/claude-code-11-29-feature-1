@@ -1,0 +1,3738 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Wetland Multi-Station Acoustic Observation Service",
+    "description": "Groups records of the same sound heard at several wetland stations into one event, using per-boot clock calibration, a coarse-to-fine grid search over the configured observation area, and an exclusive set-packing solver. Results are exploratory field-survey output, not an alerting service.",
+    "version": "1.0.0",
+    "x-results-are-exploratory": true
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Liveness and database connectivity",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/reset": {
+      "post": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Drop and recreate all tables (development only)",
+        "operationId": "reset_admin_reset_post",
+        "parameters": [
+          {
+            "name": "confirm",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Confirm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations": {
+      "get": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "List stations",
+        "operationId": "list_stations_stations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StationOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Stations Stations Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "Create a station with its synthetic coordinates",
+        "operationId": "create_station_stations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stations/{station_id}": {
+      "put": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "Update a station",
+        "operationId": "update_station_stations__station_id__put",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stations/{station_id}/progress": {
+      "get": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "List a station's declared upload progress",
+        "operationId": "station_progress_stations__station_id__progress_get",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "Declare a station's upload progress",
+        "operationId": "post_progress_stations__station_id__progress_post",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProgressRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stations/{station_id}/observations": {
+      "post": {
+        "tags": [
+          "ingestion"
+        ],
+        "summary": "Post Observations",
+        "operationId": "post_observations_stations__station_id__observations_post",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationBatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/calibration-sources": {
+      "get": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "List Calibration Sources",
+        "operationId": "list_calibration_sources_calibration_sources_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CalibrationSourceOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Calibration Sources Calibration Sources Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Create Calibration Source",
+        "operationId": "create_calibration_source_calibration_sources_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalibrationSourceCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalibrationSourceOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/sound-classes": {
+      "get": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "List sound classes",
+        "operationId": "list_sound_classes_sound_classes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClassOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Sound Classes Sound Classes Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Register a sound class and feature distance limit",
+        "operationId": "create_sound_class_sound_classes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/observations": {
+      "get": {
+        "tags": [
+          "observations"
+        ],
+        "summary": "List stored observations with calibration state",
+        "operationId": "list_observations_observations_get",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Station Id"
+            }
+          },
+          {
+            "name": "boot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Boot Id"
+            }
+          },
+          {
+            "name": "class_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Class Label"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "calibration_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Calibration Status"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/observations/{observation_id}": {
+      "get": {
+        "tags": [
+          "observations"
+        ],
+        "summary": "Fetch one observation",
+        "operationId": "get_observation_observations__observation_id__get",
+        "parameters": [
+          {
+            "name": "observation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Observation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/conflicts": {
+      "get": {
+        "tags": [
+          "observations"
+        ],
+        "summary": "List retransmissions that conflicted with stored records",
+        "operationId": "list_conflicts_conflicts_get",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Station Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConflictOut"
+                  },
+                  "title": "Response List Conflicts Conflicts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/calibrations": {
+      "get": {
+        "tags": [
+          "calibration"
+        ],
+        "summary": "List per-boot clock calibrations",
+        "operationId": "list_calibrations_calibrations_get",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Station Id"
+            }
+          },
+          {
+            "name": "valid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Valid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalibrationList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stations/{station_id}/exclusions": {
+      "post": {
+        "tags": [
+          "exclusions"
+        ],
+        "summary": "Create Station Exclusion",
+        "operationId": "create_station_exclusion_stations__station_id__exclusions_post",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StationExclusionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExclusionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/exclusions": {
+      "get": {
+        "tags": [
+          "exclusions"
+        ],
+        "summary": "List exclusions",
+        "operationId": "list_exclusions_exclusions_get",
+        "parameters": [
+          {
+            "name": "active_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Active Only"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExclusionOut"
+                  },
+                  "title": "Response List Exclusions Exclusions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/exclusions/{exclusion_id}": {
+      "delete": {
+        "tags": [
+          "exclusions"
+        ],
+        "summary": "Deactivate an exclusion",
+        "operationId": "deactivate_exclusion_exclusions__exclusion_id__delete",
+        "parameters": [
+          {
+            "name": "exclusion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Exclusion Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExclusionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events/{event_id}/exclusions": {
+      "post": {
+        "tags": [
+          "exclusions"
+        ],
+        "summary": "Record an investigator exclusion for one event",
+        "description": "Record an investigator's explicit exclusion of a station for one event.\n\nThe exclusion is stored with its reason and station, and the event's\nfinalization block is updated *only if* that station was the reason the\nevent was still provisional.  A judgement about one station never silently\nfinalises an event that has other unsettled stations.",
+        "operationId": "exclude_station_for_event_events__event_id__exclusions_post",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventExclusionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExclusionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/runs": {
+      "post": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Start a processing run",
+        "operationId": "create_processing_run_runs_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "List processing runs",
+        "operationId": "list_runs_runs_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RunOut"
+                  },
+                  "title": "Response List Runs Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Fetch a run",
+        "operationId": "get_run_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/options": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Show competing decompositions when the solver tied",
+        "operationId": "run_options_runs__run_id__options_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOptions"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/select": {
+      "post": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Pick one decomposition for a tied run",
+        "operationId": "select_option_runs__run_id__select_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectOptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/resume": {
+      "post": {
+        "tags": [
+          "runs"
+        ],
+        "summary": "Resume a paused or failed run from its cutoff",
+        "operationId": "resume_run_runs__run_id__resume_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "List events with position, time and candidate regions",
+        "operationId": "list_events_events_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "class_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Class Label"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "include_superseded",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Superseded"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events/{event_id}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Event detail with observations, exclusions and revisions",
+        "operationId": "get_event_events__event_id__get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events/{event_id}/anchors": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Calibration anchors behind an event's observations",
+        "description": "Calibration anchors behind every observation used by an event.",
+        "operationId": "event_anchors_events__event_id__anchors_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events/{event_id}/observations": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Raw observations used by an event",
+        "operationId": "event_observations_events__event_id__observations_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Service-wide counts",
+        "operationId": "stats_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsSummary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BatchResponse": {
+        "properties": {
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id"
+          },
+          "replayed": {
+            "type": "boolean",
+            "title": "Replayed"
+          },
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/IngestionCounts"
+          },
+          "accepted_observation_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Accepted Observation Ids"
+          },
+          "duplicate_sequences": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Duplicate Sequences"
+          },
+          "conflict_sequences": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Conflict Sequences"
+          },
+          "progress_recorded": {
+            "type": "boolean",
+            "title": "Progress Recorded"
+          },
+          "replay_of_batch_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replay Of Batch Id"
+          },
+          "original_observation_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Original Observation Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "replayed",
+          "boot_id",
+          "counts",
+          "accepted_observation_ids",
+          "duplicate_sequences",
+          "conflict_sequences",
+          "progress_recorded"
+        ],
+        "title": "BatchResponse"
+      },
+      "CalibrationList": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "calibrations": {
+            "items": {
+              "$ref": "#/components/schemas/CalibrationOut"
+            },
+            "type": "array",
+            "title": "Calibrations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "calibrations"
+        ],
+        "title": "CalibrationList"
+      },
+      "CalibrationOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "version_hash": {
+            "type": "string",
+            "title": "Version Hash"
+          },
+          "anchor_count": {
+            "type": "integer",
+            "title": "Anchor Count"
+          },
+          "anchor_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Anchor Ids"
+          },
+          "valid": {
+            "type": "boolean",
+            "title": "Valid"
+          },
+          "invalid_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalid Reason"
+          },
+          "rms_residual_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rms Residual Ms"
+          },
+          "max_residual_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Residual Ms"
+          },
+          "uncertainty_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty Ms"
+          },
+          "anchor_local_span_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anchor Local Span S"
+          },
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/CalibrationSegmentOut"
+            },
+            "type": "array",
+            "title": "Segments"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "station_id",
+          "boot_id",
+          "version_hash",
+          "anchor_count",
+          "anchor_ids",
+          "valid",
+          "invalid_reason",
+          "rms_residual_ms",
+          "max_residual_ms",
+          "uncertainty_ms",
+          "anchor_local_span_s",
+          "segments",
+          "created_at"
+        ],
+        "title": "CalibrationOut"
+      },
+      "CalibrationRef": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Source Id"
+          },
+          "emission_reference_at": {
+            "type": "string",
+            "title": "Emission Reference At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_id",
+          "emission_reference_at"
+        ],
+        "title": "CalibrationRef"
+      },
+      "CalibrationSegmentOut": {
+        "properties": {
+          "index": {
+            "type": "integer",
+            "title": "Index"
+          },
+          "anchor_count": {
+            "type": "integer",
+            "title": "Anchor Count"
+          },
+          "anchor_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Anchor Ids"
+          },
+          "local_from": {
+            "type": "string",
+            "title": "Local From"
+          },
+          "local_to": {
+            "type": "string",
+            "title": "Local To"
+          },
+          "slope": {
+            "type": "number",
+            "title": "Slope"
+          },
+          "intercept_ms": {
+            "type": "number",
+            "title": "Intercept Ms"
+          },
+          "rms_residual_ms": {
+            "type": "number",
+            "title": "Rms Residual Ms"
+          },
+          "max_residual_ms": {
+            "type": "number",
+            "title": "Max Residual Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "index",
+          "anchor_count",
+          "anchor_ids",
+          "local_from",
+          "local_to",
+          "slope",
+          "intercept_ms",
+          "rms_residual_ms",
+          "max_residual_ms"
+        ],
+        "title": "CalibrationSegmentOut"
+      },
+      "CalibrationSourceCreate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "x": {
+            "type": "number",
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "title": "Y"
+          },
+          "emissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Emissions"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "x",
+          "y",
+          "emissions"
+        ],
+        "title": "CalibrationSourceCreate"
+      },
+      "CalibrationSourceOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "x": {
+            "type": "number",
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "title": "Y"
+          },
+          "emissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Emissions"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "x",
+          "y",
+          "emissions",
+          "notes"
+        ],
+        "title": "CalibrationSourceOut"
+      },
+      "ClassCreate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "feature_dim": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 128.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Dim"
+          },
+          "feature_distance_limit": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Distance Limit"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ClassCreate"
+      },
+      "ClassOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "feature_dim": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Dim"
+          },
+          "feature_distance_limit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feature Distance Limit"
+          },
+          "observation_count": {
+            "type": "integer",
+            "title": "Observation Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "description",
+          "feature_dim",
+          "feature_distance_limit"
+        ],
+        "title": "ClassOut"
+      },
+      "ConflictOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "source_seq": {
+            "type": "integer",
+            "title": "Source Seq"
+          },
+          "existing_observation_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Existing Observation Id"
+          },
+          "content_hash": {
+            "type": "string",
+            "title": "Content Hash"
+          },
+          "payload": {
+            "type": "object",
+            "title": "Payload"
+          },
+          "received_at": {
+            "type": "string",
+            "title": "Received At"
+          },
+          "resolved": {
+            "type": "boolean",
+            "title": "Resolved"
+          },
+          "resolution_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "station_id",
+          "boot_id",
+          "source_seq",
+          "existing_observation_id",
+          "content_hash",
+          "payload",
+          "received_at",
+          "resolved",
+          "resolution_note"
+        ],
+        "title": "ConflictOut"
+      },
+      "EventDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "run_id": {
+            "type": "integer",
+            "title": "Run Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "class_label": {
+            "type": "string",
+            "title": "Class Label"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "position": {
+            "type": "object",
+            "title": "Position"
+          },
+          "emission": {
+            "type": "object",
+            "title": "Emission"
+          },
+          "residual": {
+            "type": "object",
+            "title": "Residual"
+          },
+          "station_count": {
+            "type": "integer",
+            "title": "Station Count"
+          },
+          "observation_count": {
+            "type": "integer",
+            "title": "Observation Count"
+          },
+          "region_count": {
+            "type": "integer",
+            "title": "Region Count"
+          },
+          "regions": {
+            "items": {
+              "$ref": "#/components/schemas/RegionOut"
+            },
+            "type": "array",
+            "title": "Regions"
+          },
+          "finalization": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalization"
+          },
+          "calibration_hash": {
+            "type": "string",
+            "title": "Calibration Hash"
+          },
+          "supersedes_events": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Supersedes Events"
+          },
+          "superseded_by_event_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By Event Id"
+          },
+          "window": {
+            "type": "object",
+            "title": "Window"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "observations": {
+            "items": {
+              "$ref": "#/components/schemas/EventObservationOut"
+            },
+            "type": "array",
+            "title": "Observations"
+          },
+          "exclusion_reasons": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Exclusion Reasons"
+          },
+          "revisions": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Revisions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "run_id",
+          "batch_id",
+          "class_label",
+          "status",
+          "revision",
+          "reason",
+          "position",
+          "emission",
+          "residual",
+          "station_count",
+          "observation_count",
+          "region_count",
+          "regions",
+          "finalization",
+          "calibration_hash",
+          "supersedes_events",
+          "superseded_by_event_id",
+          "window",
+          "created_at",
+          "updated_at",
+          "observations",
+          "exclusion_reasons",
+          "revisions"
+        ],
+        "title": "EventDetail"
+      },
+      "EventExclusionCreate": {
+        "properties": {
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 3,
+            "title": "Reason"
+          },
+          "created_by": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Created By",
+            "default": "investigator"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "station_id",
+          "reason"
+        ],
+        "title": "EventExclusionCreate"
+      },
+      "EventList": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/EventOut"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "events"
+        ],
+        "title": "EventList"
+      },
+      "EventObservationOut": {
+        "properties": {
+          "observation_id": {
+            "type": "integer",
+            "title": "Observation Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "source_seq": {
+            "type": "integer",
+            "title": "Source Seq"
+          },
+          "class_label": {
+            "type": "string",
+            "title": "Class Label"
+          },
+          "local_capture_at": {
+            "type": "string",
+            "title": "Local Capture At"
+          },
+          "corrected_arrival": {
+            "type": "string",
+            "title": "Corrected Arrival"
+          },
+          "uncertainty_ms": {
+            "type": "number",
+            "title": "Uncertainty Ms"
+          },
+          "residual_ms": {
+            "type": "number",
+            "title": "Residual Ms"
+          },
+          "calibration_model_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Model Id"
+          },
+          "anchor_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Anchor Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "observation_id",
+          "station_id",
+          "boot_id",
+          "source_seq",
+          "class_label",
+          "local_capture_at",
+          "corrected_arrival",
+          "uncertainty_ms",
+          "residual_ms",
+          "calibration_model_id",
+          "anchor_ids"
+        ],
+        "title": "EventObservationOut"
+      },
+      "EventOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "run_id": {
+            "type": "integer",
+            "title": "Run Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "class_label": {
+            "type": "string",
+            "title": "Class Label"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "position": {
+            "type": "object",
+            "title": "Position"
+          },
+          "emission": {
+            "type": "object",
+            "title": "Emission"
+          },
+          "residual": {
+            "type": "object",
+            "title": "Residual"
+          },
+          "station_count": {
+            "type": "integer",
+            "title": "Station Count"
+          },
+          "observation_count": {
+            "type": "integer",
+            "title": "Observation Count"
+          },
+          "region_count": {
+            "type": "integer",
+            "title": "Region Count"
+          },
+          "regions": {
+            "items": {
+              "$ref": "#/components/schemas/RegionOut"
+            },
+            "type": "array",
+            "title": "Regions"
+          },
+          "finalization": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalization"
+          },
+          "calibration_hash": {
+            "type": "string",
+            "title": "Calibration Hash"
+          },
+          "supersedes_events": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Supersedes Events"
+          },
+          "superseded_by_event_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By Event Id"
+          },
+          "window": {
+            "type": "object",
+            "title": "Window"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "run_id",
+          "batch_id",
+          "class_label",
+          "status",
+          "revision",
+          "reason",
+          "position",
+          "emission",
+          "residual",
+          "station_count",
+          "observation_count",
+          "region_count",
+          "regions",
+          "finalization",
+          "calibration_hash",
+          "supersedes_events",
+          "superseded_by_event_id",
+          "window",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "EventOut"
+      },
+      "ExclusionOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "from_ref_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Ref At"
+          },
+          "to_ref_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Ref At"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "station_id",
+          "reason",
+          "from_ref_at",
+          "to_ref_at",
+          "active",
+          "created_by",
+          "created_at"
+        ],
+        "title": "ExclusionOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "database": {
+            "type": "string",
+            "title": "Database"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "database",
+          "version"
+        ],
+        "title": "HealthResponse"
+      },
+      "IngestionCounts": {
+        "properties": {
+          "received": {
+            "type": "integer",
+            "title": "Received"
+          },
+          "accepted": {
+            "type": "integer",
+            "title": "Accepted"
+          },
+          "duplicates": {
+            "type": "integer",
+            "title": "Duplicates"
+          },
+          "conflicts": {
+            "type": "integer",
+            "title": "Conflicts"
+          },
+          "rejected": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rejected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "received",
+          "accepted",
+          "duplicates",
+          "conflicts"
+        ],
+        "title": "IngestionCounts"
+      },
+      "ObservationBatch": {
+        "properties": {
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "boot_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Boot Id"
+          },
+          "batch_key": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Batch Key",
+            "description": "Station-chosen unique batch identifier"
+          },
+          "uploaded_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uploaded At",
+            "description": "Station-side upload timestamp (UTC). Informational only; never used for association."
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationRecord"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "minItems": 1,
+            "title": "Records"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProgressUpload"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "station_id",
+          "boot_id",
+          "batch_key",
+          "records"
+        ],
+        "title": "ObservationBatch"
+      },
+      "ObservationList": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "observations": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationOut"
+            },
+            "type": "array",
+            "title": "Observations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "observations"
+        ],
+        "title": "ObservationList"
+      },
+      "ObservationOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "source_seq": {
+            "type": "integer",
+            "title": "Source Seq"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "class_label": {
+            "type": "string",
+            "title": "Class Label"
+          },
+          "local_capture_at": {
+            "type": "string",
+            "title": "Local Capture At"
+          },
+          "uploaded_at": {
+            "type": "string",
+            "title": "Uploaded At"
+          },
+          "ingested_at": {
+            "type": "string",
+            "title": "Ingested At"
+          },
+          "features": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Features"
+          },
+          "uncertainty_ms": {
+            "type": "number",
+            "title": "Uncertainty Ms"
+          },
+          "calibration_status": {
+            "type": "string",
+            "title": "Calibration Status"
+          },
+          "calibration_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Reason"
+          },
+          "calibration_model_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Model Id"
+          },
+          "corrected_arrival": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Arrival"
+          },
+          "current_event_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Event Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "station_id",
+          "boot_id",
+          "source_seq",
+          "kind",
+          "class_label",
+          "local_capture_at",
+          "uploaded_at",
+          "ingested_at",
+          "features",
+          "uncertainty_ms",
+          "calibration_status",
+          "calibration_reason",
+          "calibration_model_id",
+          "corrected_arrival",
+          "current_event_id"
+        ],
+        "title": "ObservationOut"
+      },
+      "ObservationRecord": {
+        "properties": {
+          "source_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Seq"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "sound",
+              "calibration"
+            ],
+            "title": "Kind",
+            "default": "sound"
+          },
+          "class_label": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Class Label"
+          },
+          "local_capture_at": {
+            "type": "string",
+            "title": "Local Capture At"
+          },
+          "features": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Features"
+          },
+          "uncertainty_ms": {
+            "type": "number",
+            "maximum": 5000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Uncertainty Ms"
+          },
+          "calibration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CalibrationRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "detector_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detector Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_seq",
+          "class_label",
+          "local_capture_at",
+          "features",
+          "uncertainty_ms"
+        ],
+        "title": "ObservationRecord"
+      },
+      "ProgressRequest": {
+        "properties": {
+          "boot_id": {
+            "type": "string",
+            "title": "Boot Id"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/ProgressUpload"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "boot_id",
+          "progress"
+        ],
+        "title": "ProgressRequest"
+      },
+      "ProgressUpload": {
+        "properties": {
+          "complete_from_local_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Complete From Local At"
+          },
+          "complete_through_local_at": {
+            "type": "string",
+            "title": "Complete Through Local At"
+          },
+          "complete": {
+            "type": "boolean",
+            "title": "Complete",
+            "default": true
+          },
+          "gaps": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Gaps"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "complete_through_local_at"
+        ],
+        "title": "ProgressUpload"
+      },
+      "RegionOut": {
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "title": "Region Id"
+          },
+          "bounds": {
+            "type": "object",
+            "title": "Bounds"
+          },
+          "area_m2": {
+            "type": "number",
+            "title": "Area M2"
+          },
+          "cell_count": {
+            "type": "integer",
+            "title": "Cell Count"
+          },
+          "representative": {
+            "type": "object",
+            "title": "Representative"
+          },
+          "cells": {
+            "items": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Cells"
+          },
+          "cells_truncated": {
+            "type": "boolean",
+            "title": "Cells Truncated",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_id",
+          "bounds",
+          "area_m2",
+          "cell_count",
+          "representative"
+        ],
+        "title": "RegionOut"
+      },
+      "RunOption": {
+        "properties": {
+          "option_id": {
+            "type": "string",
+            "title": "Option Id"
+          },
+          "explained_observations": {
+            "type": "integer",
+            "title": "Explained Observations"
+          },
+          "total_residual_us": {
+            "type": "integer",
+            "title": "Total Residual Us"
+          },
+          "events": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "option_id",
+          "explained_observations",
+          "total_residual_us",
+          "events"
+        ],
+        "title": "RunOption"
+      },
+      "RunOptions": {
+        "properties": {
+          "run_id": {
+            "type": "integer",
+            "title": "Run Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/RunOption"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "proven_optimal": {
+            "type": "boolean",
+            "title": "Proven Optimal"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id",
+          "status",
+          "options",
+          "proven_optimal",
+          "notes"
+        ],
+        "title": "RunOptions"
+      },
+      "RunOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          },
+          "cutoff": {
+            "type": "string",
+            "title": "Cutoff"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "calibration_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Hash"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "resume_of_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resume Of Run Id"
+          },
+          "revision_of_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision Of Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "batch_id",
+          "mode",
+          "status",
+          "phase",
+          "cutoff",
+          "created_at",
+          "started_at",
+          "finished_at",
+          "calibration_hash",
+          "summary",
+          "error",
+          "resume_of_run_id",
+          "revision_of_run_id"
+        ],
+        "title": "RunOut"
+      },
+      "RunRequest": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "full",
+              "revision"
+            ],
+            "title": "Mode",
+            "default": "full"
+          },
+          "wait": {
+            "type": "boolean",
+            "title": "Wait",
+            "default": true
+          },
+          "debug_stop_after_phase": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "calibrate",
+                  "collect",
+                  "candidates",
+                  "localize",
+                  "solve",
+                  "finalize"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Debug Stop After Phase"
+          },
+          "class_labels": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Labels"
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RunRequest"
+      },
+      "SelectOptionRequest": {
+        "properties": {
+          "option_id": {
+            "type": "string",
+            "title": "Option Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "option_id"
+        ],
+        "title": "SelectOptionRequest"
+      },
+      "StationCreate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.-]+$",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "x": {
+            "type": "number",
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "title": "Y"
+          },
+          "hearing_radius_m": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hearing Radius M"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": true
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "x",
+          "y"
+        ],
+        "title": "StationCreate"
+      },
+      "StationExclusionCreate": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 3,
+            "title": "Reason"
+          },
+          "from_ref_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Ref At"
+          },
+          "to_ref_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Ref At"
+          },
+          "created_by": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Created By",
+            "default": "investigator"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reason"
+        ],
+        "title": "StationExclusionCreate"
+      },
+      "StationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "x": {
+            "type": "number",
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "title": "Y"
+          },
+          "hearing_radius_m": {
+            "type": "number",
+            "title": "Hearing Radius M"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "boot_count": {
+            "type": "integer",
+            "title": "Boot Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "x",
+          "y",
+          "hearing_radius_m",
+          "active",
+          "notes",
+          "created_at"
+        ],
+        "title": "StationOut"
+      },
+      "StatsSummary": {
+        "properties": {
+          "stations": {
+            "type": "integer",
+            "title": "Stations"
+          },
+          "observations": {
+            "type": "integer",
+            "title": "Observations"
+          },
+          "uncalibrated_observations": {
+            "type": "integer",
+            "title": "Uncalibrated Observations"
+          },
+          "conflicts": {
+            "type": "integer",
+            "title": "Conflicts"
+          },
+          "runs": {
+            "type": "object",
+            "title": "Runs"
+          },
+          "events": {
+            "type": "object",
+            "title": "Events"
+          },
+          "latest_run": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RunOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "stations",
+          "observations",
+          "uncalibrated_observations",
+          "conflicts",
+          "runs",
+          "events",
+          "latest_run"
+        ],
+        "title": "StatsSummary"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

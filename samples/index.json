@@ -1,0 +1,37 @@
+{
+  "overlapping": {
+    "title": "Two chirp sources calling almost simultaneously",
+    "stations": 4,
+    "truth_events": 6,
+    "waves": 8,
+    "records": 320
+  },
+  "reboot": {
+    "title": "Station restart with a clock jump and a late backfill",
+    "stations": 4,
+    "truth_events": 6,
+    "waves": 9,
+    "records": 528
+  },
+  "collinear": {
+    "title": "Collinear stations cannot resolve the mirror pair",
+    "stations": 4,
+    "truth_events": 6,
+    "waves": 8,
+    "records": 216
+  },
+  "duplicates": {
+    "title": "Retransmitted batches: identical replay and a content conflict",
+    "stations": 4,
+    "truth_events": 3,
+    "waves": 8,
+    "records": 222
+  },
+  "revision": {
+    "title": "Late report and calibration revision produce event revisions",
+    "stations": 4,
+    "truth_events": 5,
+    "waves": 7,
+    "records": 340
+  }
+}

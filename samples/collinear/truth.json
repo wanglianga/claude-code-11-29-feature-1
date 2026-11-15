@@ -1,0 +1,5938 @@
+{
+  "scenario": "collinear",
+  "title": "Collinear stations cannot resolve the mirror pair",
+  "description": "All four stations lie exactly on y = 500 m. Reflection across that line leaves every propagation delay unchanged, so a call at (900, 180) is timing-indistinguishable from one at (900, 820). The service must return both disconnected feasible regions and must not report one coordinate. Counting is unaffected: each call is still one event.",
+  "propagation_speed_mps": 343.0,
+  "area": {
+    "x_min": 0.0,
+    "x_max": 2200.0,
+    "y_min": -400.0,
+    "y_max": 1400.0
+  },
+  "stations": [
+    {
+      "id": "S1",
+      "x": 150.0,
+      "y": 500.0,
+      "hearing_radius_m": 1900.0,
+      "late": false,
+      "boots": [
+        {
+          "boot_id": "b1",
+          "boot_start_ref": "2026-11-13T23:00:00.000000Z",
+          "boot_start_local": "2026-11-14T09:40:00.000000",
+          "drift_ppm": 35.0,
+          "slope": 1.000035,
+          "intercept_us": -1793515611378000.0,
+          "reboot_reason": null
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "x": 750.0,
+      "y": 500.0,
+      "hearing_radius_m": 1900.0,
+      "late": false,
+      "boots": [
+        {
+          "boot_id": "b1",
+          "boot_start_ref": "2026-11-13T23:00:00.000000Z",
+          "boot_start_local": "2026-11-14T09:40:00.000000",
+          "drift_ppm": 35.0,
+          "slope": 1.000035,
+          "intercept_us": -1793515611378000.0,
+          "reboot_reason": null
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "x": 1350.0,
+      "y": 500.0,
+      "hearing_radius_m": 1900.0,
+      "late": false,
+      "boots": [
+        {
+          "boot_id": "b1",
+          "boot_start_ref": "2026-11-13T23:00:00.000000Z",
+          "boot_start_local": "2026-11-14T09:40:00.000000",
+          "drift_ppm": 35.0,
+          "slope": 1.000035,
+          "intercept_us": -1793515611378000.0,
+          "reboot_reason": null
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "x": 1950.0,
+      "y": 500.0,
+      "hearing_radius_m": 1900.0,
+      "late": false,
+      "boots": [
+        {
+          "boot_id": "b1",
+          "boot_start_ref": "2026-11-13T23:00:00.000000Z",
+          "boot_start_local": "2026-11-14T09:40:00.000000",
+          "drift_ppm": 35.0,
+          "slope": 1.000035,
+          "intercept_us": -1793515611378000.0,
+          "reboot_reason": null
+        }
+      ]
+    }
+  ],
+  "calibration_sources": [
+    {
+      "id": "C1",
+      "x": -50.0,
+      "y": 1200.0,
+      "emissions": [
+        "2026-11-13T23:25:00.000000Z",
+        "2026-11-13T23:27:00.000000Z",
+        "2026-11-13T23:29:00.000000Z",
+        "2026-11-13T23:31:00.000000Z",
+        "2026-11-13T23:33:00.000000Z",
+        "2026-11-13T23:35:00.000000Z",
+        "2026-11-13T23:37:00.000000Z",
+        "2026-11-13T23:39:00.000000Z",
+        "2026-11-13T23:41:00.000000Z",
+        "2026-11-13T23:43:00.000000Z",
+        "2026-11-13T23:45:00.000000Z",
+        "2026-11-13T23:47:00.000000Z",
+        "2026-11-13T23:49:00.000000Z",
+        "2026-11-13T23:51:00.000000Z",
+        "2026-11-13T23:53:00.000000Z",
+        "2026-11-13T23:55:00.000000Z",
+        "2026-11-13T23:57:00.000000Z",
+        "2026-11-13T23:59:00.000000Z",
+        "2026-11-14T00:01:00.000000Z",
+        "2026-11-14T00:03:00.000000Z",
+        "2026-11-14T00:05:00.000000Z",
+        "2026-11-14T00:07:00.000000Z",
+        "2026-11-14T00:09:00.000000Z",
+        "2026-11-14T00:11:00.000000Z",
+        "2026-11-14T00:13:00.000000Z",
+        "2026-11-14T00:15:00.000000Z",
+        "2026-11-14T00:17:00.000000Z",
+        "2026-11-14T00:19:00.000000Z",
+        "2026-11-14T00:21:00.000000Z",
+        "2026-11-14T00:23:00.000000Z",
+        "2026-11-14T00:25:00.000000Z",
+        "2026-11-14T00:27:00.000000Z"
+      ],
+      "emissions_us": [
+        1794612300000000,
+        1794612420000000,
+        1794612540000000,
+        1794612660000000,
+        1794612780000000,
+        1794612900000000,
+        1794613020000000,
+        1794613140000000,
+        1794613260000000,
+        1794613380000000,
+        1794613500000000,
+        1794613620000000,
+        1794613740000000,
+        1794613860000000,
+        1794613980000000,
+        1794614100000000,
+        1794614220000000,
+        1794614340000000,
+        1794614460000000,
+        1794614580000000,
+        1794614700000000,
+        1794614820000000,
+        1794614940000000,
+        1794615060000000,
+        1794615180000000,
+        1794615300000000,
+        1794615420000000,
+        1794615540000000,
+        1794615660000000,
+        1794615780000000,
+        1794615900000000,
+        1794616020000000
+      ],
+      "late_from": null
+    },
+    {
+      "id": "C2",
+      "x": 2250.0,
+      "y": -200.0,
+      "emissions": [
+        "2026-11-13T23:25:50.000000Z",
+        "2026-11-13T23:27:45.000000Z",
+        "2026-11-13T23:29:40.000000Z",
+        "2026-11-13T23:31:35.000000Z",
+        "2026-11-13T23:33:30.000000Z",
+        "2026-11-13T23:35:25.000000Z",
+        "2026-11-13T23:37:20.000000Z",
+        "2026-11-13T23:39:15.000000Z",
+        "2026-11-13T23:41:10.000000Z",
+        "2026-11-13T23:43:05.000000Z",
+        "2026-11-13T23:45:00.000000Z",
+        "2026-11-13T23:46:55.000000Z",
+        "2026-11-13T23:48:50.000000Z",
+        "2026-11-13T23:50:45.000000Z",
+        "2026-11-13T23:52:40.000000Z",
+        "2026-11-13T23:54:35.000000Z",
+        "2026-11-13T23:56:30.000000Z",
+        "2026-11-13T23:58:25.000000Z",
+        "2026-11-14T00:00:20.000000Z",
+        "2026-11-14T00:02:15.000000Z",
+        "2026-11-14T00:04:10.000000Z",
+        "2026-11-14T00:06:05.000000Z",
+        "2026-11-14T00:08:00.000000Z",
+        "2026-11-14T00:09:55.000000Z",
+        "2026-11-14T00:11:50.000000Z",
+        "2026-11-14T00:13:45.000000Z",
+        "2026-11-14T00:15:40.000000Z",
+        "2026-11-14T00:17:35.000000Z",
+        "2026-11-14T00:19:30.000000Z",
+        "2026-11-14T00:21:25.000000Z",
+        "2026-11-14T00:23:20.000000Z",
+        "2026-11-14T00:25:15.000000Z"
+      ],
+      "emissions_us": [
+        1794612350000000,
+        1794612465000000,
+        1794612580000000,
+        1794612695000000,
+        1794612810000000,
+        1794612925000000,
+        1794613040000000,
+        1794613155000000,
+        1794613270000000,
+        1794613385000000,
+        1794613500000000,
+        1794613615000000,
+        1794613730000000,
+        1794613845000000,
+        1794613960000000,
+        1794614075000000,
+        1794614190000000,
+        1794614305000000,
+        1794614420000000,
+        1794614535000000,
+        1794614650000000,
+        1794614765000000,
+        1794614880000000,
+        1794614995000000,
+        1794615110000000,
+        1794615225000000,
+        1794615340000000,
+        1794615455000000,
+        1794615570000000,
+        1794615685000000,
+        1794615800000000,
+        1794615915000000
+      ],
+      "late_from": null
+    }
+  ],
+  "events": [
+    {
+      "key": "A#0",
+      "source_id": "A",
+      "call_index": 0,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 180.0,
+      "emission_s": 150.0,
+      "emission": "2026-11-14T00:02:30.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "key": "A#1",
+      "source_id": "A",
+      "call_index": 1,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 180.0,
+      "emission_s": 800.0,
+      "emission": "2026-11-14T00:13:20.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "key": "A#2",
+      "source_id": "A",
+      "call_index": 2,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 180.0,
+      "emission_s": 1450.0,
+      "emission": "2026-11-14T00:24:10.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "key": "B#0",
+      "source_id": "B",
+      "call_index": 0,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 820.0,
+      "emission_s": 420.0,
+      "emission": "2026-11-14T00:07:00.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "key": "B#1",
+      "source_id": "B",
+      "call_index": 1,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 820.0,
+      "emission_s": 1100.0,
+      "emission": "2026-11-14T00:18:20.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    },
+    {
+      "key": "B#2",
+      "source_id": "B",
+      "call_index": 2,
+      "class_label": "croak",
+      "x": 900.0,
+      "y": 820.0,
+      "emission_s": 1750.0,
+      "emission": "2026-11-14T00:29:10.000000Z",
+      "heard_by": [
+        "S1",
+        "S2",
+        "S3",
+        "S4"
+      ]
+    }
+  ],
+  "waves": [
+    {
+      "station_id": "S2",
+      "boot_id": "b1",
+      "phase": "early",
+      "upload_s": 328.41097216482973,
+      "declare_through_ref_s": 254.824629,
+      "declare_complete": false,
+      "records": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:03.150923",
+          "features": [
+            0.022238,
+            0.008483,
+            0.020738,
+            0.004978
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:54.879553",
+          "features": [
+            -0.006225,
+            -0.001264,
+            -0.015195,
+            0.014025
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:25:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:03.157199",
+          "features": [
+            -0.000918,
+            0.010419,
+            -0.012845,
+            0.006174
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:49.878866",
+          "features": [
+            -0.005011,
+            -0.006277,
+            0.009197,
+            0.012238
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:27:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:03.161171",
+          "features": [
+            -0.008947,
+            -0.019138,
+            -0.010412,
+            0.024418
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:29:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:44.883953",
+          "features": [
+            -0.002319,
+            -0.009821,
+            0.002109,
+            0.010466
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:29:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:03.166367",
+          "features": [
+            -0.001246,
+            -0.029293,
+            0.016557,
+            0.013387
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:31:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:39.901772",
+          "features": [
+            0.006451,
+            0.025597,
+            0.015329,
+            0.018948
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:31:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:03.166452",
+          "features": [
+            0.025777,
+            -0.040636,
+            -0.029154,
+            0.004787
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:33:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:34.901103",
+          "features": [
+            0.000525,
+            -0.016153,
+            0.005163,
+            0.011642
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:33:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:03.173760",
+          "features": [
+            0.008687,
+            0.03188,
+            0.012381,
+            0.010373
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:35:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:29.898557",
+          "features": [
+            -0.01388,
+            0.014373,
+            0.026676,
+            -0.000202
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:35:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:03.181055",
+          "features": [
+            -0.026224,
+            0.032202,
+            0.011039,
+            -0.003003
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:37:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:24.901911",
+          "features": [
+            -0.000893,
+            -0.035,
+            0.035733,
+            0.027315
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:37:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:03.187039",
+          "features": [
+            -0.008897,
+            -0.0276,
+            -0.002695,
+            -0.00298
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:39:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:19.902774",
+          "features": [
+            -0.00143,
+            0.006175,
+            0.009352,
+            -0.004634
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:39:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:03.185946",
+          "features": [
+            0.00305,
+            0.011506,
+            -0.003524,
+            0.005549
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:41:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:14.913730",
+          "features": [
+            0.010311,
+            0.011377,
+            0.041974,
+            -0.014097
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:41:10.000000Z"
+          }
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:03.188230",
+          "features": [
+            0.007717,
+            0.036746,
+            -0.051294,
+            -0.022478
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:43:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:09.919662",
+          "features": [
+            -0.037852,
+            -0.017701,
+            -4.4e-05,
+            -0.020637
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:43:05.000000Z"
+          }
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:03.193378",
+          "features": [
+            -0.004512,
+            -0.001255,
+            -0.054562,
+            -0.009738
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:04.922418",
+          "features": [
+            -0.010588,
+            -0.001991,
+            0.014984,
+            -0.017562
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:26:59.924586",
+          "features": [
+            -0.035519,
+            0.028816,
+            0.017988,
+            -0.034983
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:46:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 24,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:27:03.202344",
+          "features": [
+            -0.053657,
+            0.021774,
+            -0.028951,
+            0.013663
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:47:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:28:54.923767",
+          "features": [
+            0.00671,
+            0.033852,
+            0.008589,
+            0.00491
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:48:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:29:03.201001",
+          "features": [
+            0.054907,
+            -0.022937,
+            0.018292,
+            -0.005314
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:49:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:30:49.931867",
+          "features": [
+            -0.010853,
+            0.009201,
+            -0.002335,
+            -0.001721
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:50:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 28,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:31:03.211443",
+          "features": [
+            0.014931,
+            0.029461,
+            -0.018755,
+            2e-05
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:51:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:32:44.936405",
+          "features": [
+            0.003928,
+            -0.029962,
+            0.000318,
+            -0.013518
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:52:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:33:03.208165",
+          "features": [
+            0.007992,
+            0.008199,
+            0.029962,
+            -0.020403
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:53:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:34:39.934453",
+          "features": [
+            -0.013549,
+            -0.000415,
+            0.016978,
+            -0.003254
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:54:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:35:03.205589",
+          "features": [
+            -0.007744,
+            -0.037078,
+            0.016376,
+            0.006341
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:55:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:36:34.939803",
+          "features": [
+            -0.042011,
+            0.01212,
+            0.015909,
+            0.012474
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:56:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:37:03.222497",
+          "features": [
+            -0.03752,
+            -0.021667,
+            -0.039256,
+            0.02138
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:57:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:38:29.947286",
+          "features": [
+            0.018479,
+            0.043083,
+            -0.000118,
+            -0.005091
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:58:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:39:03.222384",
+          "features": [
+            -0.025194,
+            -0.011108,
+            0.021472,
+            -0.032925
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:59:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:40:24.955460",
+          "features": [
+            -0.003036,
+            -0.023058,
+            0.029106,
+            0.009306
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:00:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 38,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:41:03.225114",
+          "features": [
+            -0.018047,
+            -0.015419,
+            -0.030635,
+            -0.002345
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:01:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 39,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:42:19.960712",
+          "features": [
+            0.000602,
+            -0.00573,
+            0.007018,
+            0.001562
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:02:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 40,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:42:31.161642",
+          "features": [
+            0.393616,
+            0.98463,
+            0.488903
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 41,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:43:03.232741",
+          "features": [
+            -0.009172,
+            0.0156,
+            0.014951,
+            0.013325
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:03:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 42,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:44:14.959548",
+          "features": [
+            0.01468,
+            0.033566,
+            0.000796,
+            0.024538
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:04:10.000000Z"
+          }
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "local_capture_us": 1159503150923,
+          "arrival_us": 1794612303098315,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612300000000
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "local_capture_us": 1159554879553,
+          "arrival_us": 1794612354825134,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612350000000
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "local_capture_us": 1159623157199,
+          "arrival_us": 1794612423100390,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612420000000
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "local_capture_us": 1159669878866,
+          "arrival_us": 1794612469820422,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612465000000
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "local_capture_us": 1159743161171,
+          "arrival_us": 1794612543100162,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612540000000
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "local_capture_us": 1159784883953,
+          "arrival_us": 1794612584821484,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612580000000
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "local_capture_us": 1159863166367,
+          "arrival_us": 1794612663101158,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612660000000
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "local_capture_us": 1159899901772,
+          "arrival_us": 1794612699835278,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612695000000
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "local_capture_us": 1159983166452,
+          "arrival_us": 1794612783097044,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612780000000
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "local_capture_us": 1160014901103,
+          "arrival_us": 1794612814830584,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612810000000
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "local_capture_us": 1160103173760,
+          "arrival_us": 1794612903100151,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612900000000
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "local_capture_us": 1160129898557,
+          "arrival_us": 1794612929824013,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612925000000
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "local_capture_us": 1160223181055,
+          "arrival_us": 1794613023103246,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613020000000
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "local_capture_us": 1160244901911,
+          "arrival_us": 1794613044823342,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613040000000
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "local_capture_us": 1160343187039,
+          "arrival_us": 1794613143105030,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613140000000
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "local_capture_us": 1160359902774,
+          "arrival_us": 1794613159820180,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613155000000
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "local_capture_us": 1160463185946,
+          "arrival_us": 1794613263099738,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613260000000
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "local_capture_us": 1160474913730,
+          "arrival_us": 1794613274827111,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613270000000
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "local_capture_us": 1160583188230,
+          "arrival_us": 1794613383097822,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613380000000
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "local_capture_us": 1160589919662,
+          "arrival_us": 1794613389829018,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613385000000
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "local_capture_us": 1160703193378,
+          "arrival_us": 1794613503098770,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "local_capture_us": 1160704922418,
+          "arrival_us": 1794613504827749,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "local_capture_us": 1160819924586,
+          "arrival_us": 1794613619825892,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613615000000
+        },
+        {
+          "source_seq": 24,
+          "kind": "calibration",
+          "local_capture_us": 1160823202344,
+          "arrival_us": 1794613623103535,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613620000000
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "local_capture_us": 1160934923767,
+          "arrival_us": 1794613734821048,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613730000000
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "local_capture_us": 1160943201001,
+          "arrival_us": 1794613743097993,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613740000000
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "local_capture_us": 1161049931867,
+          "arrival_us": 1794613849825123,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613845000000
+        },
+        {
+          "source_seq": 28,
+          "kind": "calibration",
+          "local_capture_us": 1161063211443,
+          "arrival_us": 1794613863104234,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613860000000
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "local_capture_us": 1161164936405,
+          "arrival_us": 1794613964825636,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613960000000
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "local_capture_us": 1161183208165,
+          "arrival_us": 1794613983096757,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613980000000
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "local_capture_us": 1161279934453,
+          "arrival_us": 1794614079819659,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614075000000
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "local_capture_us": 1161303205589,
+          "arrival_us": 1794614103089981,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614100000000
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "local_capture_us": 1161394939803,
+          "arrival_us": 1794614194820984,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614190000000
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "local_capture_us": 1161423222497,
+          "arrival_us": 1794614223102688,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614220000000
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "local_capture_us": 1161509947286,
+          "arrival_us": 1794614309824442,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614305000000
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "local_capture_us": 1161543222384,
+          "arrival_us": 1794614343098376,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614340000000
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "local_capture_us": 1161624955460,
+          "arrival_us": 1794614424828591,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614420000000
+        },
+        {
+          "source_seq": 38,
+          "kind": "calibration",
+          "local_capture_us": 1161663225114,
+          "arrival_us": 1794614463096906,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614460000000
+        },
+        {
+          "source_seq": 39,
+          "kind": "calibration",
+          "local_capture_us": 1161739960712,
+          "arrival_us": 1794614539829818,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614535000000
+        },
+        {
+          "source_seq": 40,
+          "kind": "sound",
+          "local_capture_us": 1161751161642,
+          "arrival_us": 1794614551030356,
+          "truth_source": "A",
+          "truth_call_index": 0,
+          "emission_us": 1794614550000000
+        },
+        {
+          "source_seq": 41,
+          "kind": "calibration",
+          "local_capture_us": 1161783232741,
+          "arrival_us": 1794614583100332,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614580000000
+        },
+        {
+          "source_seq": 42,
+          "kind": "calibration",
+          "local_capture_us": 1161854959548,
+          "arrival_us": 1794614654824629,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614650000000
+        }
+      ]
+    },
+    {
+      "station_id": "S3",
+      "boot_id": "b1",
+      "phase": "early",
+      "upload_s": 358.77391904142377,
+      "declare_through_ref_s": 253.321284,
+      "declare_complete": false,
+      "records": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:04.617643",
+          "features": [
+            0.003707,
+            -0.033321,
+            0.017105,
+            0.010128
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:53.379909",
+          "features": [
+            -0.001755,
+            -0.013441,
+            -0.003483,
+            -0.054432
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:25:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:04.621840",
+          "features": [
+            -0.013223,
+            0.034351,
+            0.011132,
+            0.02394
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:48.382372",
+          "features": [
+            -0.017026,
+            -0.002885,
+            -0.001309,
+            0.014689
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:27:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:04.621232",
+          "features": [
+            0.004895,
+            0.00853,
+            -0.029795,
+            0.000969
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:29:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:43.384890",
+          "features": [
+            0.046486,
+            -0.00643,
+            0.022034,
+            0.002433
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:29:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:04.632447",
+          "features": [
+            0.028812,
+            0.007245,
+            0.002385,
+            -0.025983
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:31:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:38.392607",
+          "features": [
+            -0.003121,
+            0.010183,
+            -0.021563,
+            0.023627
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:31:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:04.638638",
+          "features": [
+            0.01157,
+            -0.037999,
+            -0.050365,
+            0.007148
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:33:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:33.397432",
+          "features": [
+            -0.01545,
+            0.03505,
+            0.033335,
+            0.000365
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:33:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:04.639255",
+          "features": [
+            -0.031366,
+            0.025635,
+            0.019102,
+            0.010592
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:35:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:28.395907",
+          "features": [
+            0.01623,
+            -0.00099,
+            0.006213,
+            0.030457
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:35:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:04.642564",
+          "features": [
+            0.012997,
+            0.002408,
+            0.022913,
+            -0.013231
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:37:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:23.397781",
+          "features": [
+            -0.030104,
+            -0.032421,
+            0.023515,
+            -0.009191
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:37:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:04.644272",
+          "features": [
+            0.028095,
+            -0.020539,
+            0.025212,
+            -0.025366
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:39:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:18.403052",
+          "features": [
+            0.003191,
+            -0.009693,
+            0.031317,
+            0.015354
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:39:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:04.651955",
+          "features": [
+            1.7e-05,
+            0.01528,
+            0.011318,
+            0.040213
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:41:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:13.410744",
+          "features": [
+            0.055892,
+            -0.037341,
+            -0.01043,
+            0.003392
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:41:10.000000Z"
+          }
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:04.654840",
+          "features": [
+            0.007967,
+            0.004771,
+            -0.008623,
+            0.013103
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:43:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:08.410538",
+          "features": [
+            0.012555,
+            -0.013,
+            0.012698,
+            0.014916
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:43:05.000000Z"
+          }
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:03.421302",
+          "features": [
+            0.037252,
+            -0.011091,
+            0.00293,
+            -0.003009
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:04.662098",
+          "features": [
+            -0.023371,
+            -0.001334,
+            0.01907,
+            0.017124
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:26:58.425745",
+          "features": [
+            -0.002623,
+            0.008968,
+            0.007329,
+            -0.029979
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:46:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 24,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:27:04.656296",
+          "features": [
+            0.003517,
+            0.023893,
+            -0.002986,
+            0.003822
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:47:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:28:53.435727",
+          "features": [
+            -0.010389,
+            -0.013481,
+            0.010569,
+            0.010971
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:48:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:29:04.666994",
+          "features": [
+            0.0141,
+            0.004444,
+            0.012773,
+            -0.030547
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:49:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:30:48.429403",
+          "features": [
+            0.021071,
+            0.027815,
+            -0.00734,
+            0.016922
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:50:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 28,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:31:04.666103",
+          "features": [
+            0.015321,
+            0.031788,
+            -0.017804,
+            0.031207
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:51:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:32:43.436328",
+          "features": [
+            -0.022599,
+            -0.039537,
+            0.000766,
+            0.005212
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:52:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:33:04.679409",
+          "features": [
+            0.029747,
+            0.029045,
+            -0.003612,
+            -0.014881
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:53:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:34:38.440101",
+          "features": [
+            -0.01311,
+            0.006034,
+            0.033269,
+            -0.013727
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:54:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:35:04.676619",
+          "features": [
+            -0.000192,
+            0.016652,
+            0.001579,
+            0.02653
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:55:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:36:33.453415",
+          "features": [
+            0.004099,
+            0.005078,
+            0.018585,
+            0.007376
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:56:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:37:04.678336",
+          "features": [
+            -0.000255,
+            -0.003844,
+            -0.000572,
+            -0.01183
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:57:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:38:28.444919",
+          "features": [
+            -0.016758,
+            -0.012607,
+            0.012785,
+            0.000737
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:58:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:39:04.685072",
+          "features": [
+            0.020148,
+            0.015855,
+            0.000152,
+            0.016105
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:59:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:40:23.447113",
+          "features": [
+            0.021577,
+            0.006899,
+            -0.031287,
+            0.032199
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:00:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 38,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:41:04.686946",
+          "features": [
+            0.007283,
+            -0.047202,
+            0.006556,
+            -0.012832
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:01:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 39,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:42:18.457669",
+          "features": [
+            -0.00742,
+            -0.000729,
+            -0.042779,
+            -0.008466
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:02:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 40,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:42:31.741153",
+          "features": [
+            0.390815,
+            0.982619,
+            0.509545
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 41,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:43:04.697170",
+          "features": [
+            0.026674,
+            0.013197,
+            0.009024,
+            -0.04168
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:03:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 42,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:44:13.456150",
+          "features": [
+            0.004153,
+            -0.001547,
+            0.002298,
+            0.022594
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:04:10.000000Z"
+          }
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "local_capture_us": 1159504617643,
+          "arrival_us": 1794612304564983,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612300000000
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "local_capture_us": 1159553379909,
+          "arrival_us": 1794612353325543,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612350000000
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "local_capture_us": 1159624621840,
+          "arrival_us": 1794612424564980,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612420000000
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "local_capture_us": 1159668382372,
+          "arrival_us": 1794612468323981,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612465000000
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "local_capture_us": 1159744621232,
+          "arrival_us": 1794612544560172,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612540000000
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "local_capture_us": 1159783384890,
+          "arrival_us": 1794612583322474,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612580000000
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "local_capture_us": 1159864632447,
+          "arrival_us": 1794612664567187,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612660000000
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "local_capture_us": 1159898392607,
+          "arrival_us": 1794612698326166,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612695000000
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "local_capture_us": 1159984638638,
+          "arrival_us": 1794612784569178,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612780000000
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "local_capture_us": 1160013397432,
+          "arrival_us": 1794612813326966,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612810000000
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "local_capture_us": 1160104639255,
+          "arrival_us": 1794612904565595,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612900000000
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "local_capture_us": 1160128395907,
+          "arrival_us": 1794612928321416,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612925000000
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "local_capture_us": 1160224642564,
+          "arrival_us": 1794613024564704,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613020000000
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "local_capture_us": 1160243397781,
+          "arrival_us": 1794613043319265,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613040000000
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "local_capture_us": 1160344644272,
+          "arrival_us": 1794613144562212,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613140000000
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "local_capture_us": 1160358403052,
+          "arrival_us": 1794613158320511,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613155000000
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "local_capture_us": 1160464651955,
+          "arrival_us": 1794613264565695,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613260000000
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "local_capture_us": 1160473410744,
+          "arrival_us": 1794613273324178,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613270000000
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "local_capture_us": 1160584654840,
+          "arrival_us": 1794613384564380,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613380000000
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "local_capture_us": 1160588410538,
+          "arrival_us": 1794613388319947,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613385000000
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "local_capture_us": 1160703421302,
+          "arrival_us": 1794613503326686,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "local_capture_us": 1160704662098,
+          "arrival_us": 1794613504567438,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "local_capture_us": 1160818425745,
+          "arrival_us": 1794613618327104,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613615000000
+        },
+        {
+          "source_seq": 24,
+          "kind": "calibration",
+          "local_capture_us": 1160824656296,
+          "arrival_us": 1794613624557436,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613620000000
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "local_capture_us": 1160933435727,
+          "arrival_us": 1794613733333060,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613730000000
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "local_capture_us": 1160944666994,
+          "arrival_us": 1794613744563934,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613740000000
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "local_capture_us": 1161048429403,
+          "arrival_us": 1794613848322712,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613845000000
+        },
+        {
+          "source_seq": 28,
+          "kind": "calibration",
+          "local_capture_us": 1161064666103,
+          "arrival_us": 1794613864558843,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613860000000
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "local_capture_us": 1161163436328,
+          "arrival_us": 1794613963325612,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613960000000
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "local_capture_us": 1161184679409,
+          "arrival_us": 1794613984567949,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613980000000
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "local_capture_us": 1161278440101,
+          "arrival_us": 1794614078325360,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614075000000
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "local_capture_us": 1161304676619,
+          "arrival_us": 1794614104560959,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614100000000
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "local_capture_us": 1161393453415,
+          "arrival_us": 1794614193334648,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614190000000
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "local_capture_us": 1161424678336,
+          "arrival_us": 1794614224558476,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614220000000
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "local_capture_us": 1161508444919,
+          "arrival_us": 1794614308322128,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614305000000
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "local_capture_us": 1161544685072,
+          "arrival_us": 1794614344561012,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614340000000
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "local_capture_us": 1161623447113,
+          "arrival_us": 1794614423320297,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614420000000
+        },
+        {
+          "source_seq": 38,
+          "kind": "calibration",
+          "local_capture_us": 1161664686946,
+          "arrival_us": 1794614464558686,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614460000000
+        },
+        {
+          "source_seq": 39,
+          "kind": "calibration",
+          "local_capture_us": 1161738457669,
+          "arrival_us": 1794614538326828,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614535000000
+        },
+        {
+          "source_seq": 40,
+          "kind": "sound",
+          "local_capture_us": 1161751741153,
+          "arrival_us": 1794614551609847,
+          "truth_source": "A",
+          "truth_call_index": 0,
+          "emission_us": 1794614550000000
+        },
+        {
+          "source_seq": 41,
+          "kind": "calibration",
+          "local_capture_us": 1161784697170,
+          "arrival_us": 1794614584564710,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614580000000
+        },
+        {
+          "source_seq": 42,
+          "kind": "calibration",
+          "local_capture_us": 1161853456150,
+          "arrival_us": 1794614653321284,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614650000000
+        }
+      ]
+    },
+    {
+      "station_id": "S4",
+      "boot_id": "b1",
+      "phase": "early",
+      "upload_s": 425.1627812059864,
+      "declare_through_ref_s": 367.223777,
+      "declare_complete": false,
+      "records": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:52.270745",
+          "features": [
+            0.000747,
+            -0.030082,
+            0.00399,
+            0.002949
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:25:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:47.279872",
+          "features": [
+            -0.014451,
+            -0.027088,
+            -0.007462,
+            -0.014808
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:27:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:42.287185",
+          "features": [
+            -0.047518,
+            -0.01503,
+            0.004941,
+            0.012049
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:29:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:37.282676",
+          "features": [
+            0.004984,
+            0.042416,
+            -0.004468,
+            0.00039
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:31:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:32.291844",
+          "features": [
+            -0.00857,
+            0.028283,
+            -0.014099,
+            0.013482
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:33:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:27.299321",
+          "features": [
+            -0.010397,
+            0.045672,
+            6.7e-05,
+            0.015719
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:35:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:22.298578",
+          "features": [
+            -0.006255,
+            -0.002423,
+            -0.021764,
+            0.000482
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:37:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:17.302384",
+          "features": [
+            -0.009423,
+            -0.014054,
+            -0.018745,
+            -0.007059
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:39:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:12.307488",
+          "features": [
+            0.008157,
+            -0.004774,
+            0.007322,
+            0.001056
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:41:10.000000Z"
+          }
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:07.312121",
+          "features": [
+            0.010161,
+            -0.002092,
+            -0.028182,
+            -0.000601
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:43:05.000000Z"
+          }
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:02.321081",
+          "features": [
+            0.006328,
+            0.017955,
+            -0.013802,
+            -0.000323
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:26:57.318097",
+          "features": [
+            0.029852,
+            -0.011497,
+            -0.020457,
+            -0.027192
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:46:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:28:52.318911",
+          "features": [
+            -0.0234,
+            0.00582,
+            0.004948,
+            -0.026137
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:48:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:30:47.323965",
+          "features": [
+            0.00144,
+            0.014998,
+            0.030284,
+            -0.007651
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:50:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:32:42.328824",
+          "features": [
+            0.017777,
+            -0.005464,
+            -0.012114,
+            0.009555
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:52:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:34:37.344510",
+          "features": [
+            -0.012877,
+            0.000343,
+            0.003466,
+            0.020486
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:54:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:36:32.345725",
+          "features": [
+            -0.024765,
+            -0.007508,
+            -0.068894,
+            0.016248
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:56:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:38:27.343360",
+          "features": [
+            -0.003465,
+            0.018287,
+            0.009879,
+            -0.002836
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-13T23:58:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:40:22.348454",
+          "features": [
+            0.017829,
+            0.003957,
+            -0.002991,
+            -0.030963
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:00:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:42:17.353848",
+          "features": [
+            0.026735,
+            -0.00728,
+            -0.002427,
+            0.031669
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:02:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 21,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:42:33.331594",
+          "features": [
+            0.409896,
+            0.98478,
+            0.505287
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:44:12.364730",
+          "features": [
+            -0.013309,
+            -0.011502,
+            0.009948,
+            -0.021103
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:04:10.000000Z"
+          }
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:46:07.362630",
+          "features": [
+            0.001633,
+            -0.007949,
+            0.01087,
+            0.031626
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:06:05.000000Z"
+          }
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "local_capture_us": 1159552270745,
+          "arrival_us": 1794612352216417,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612350000000
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "local_capture_us": 1159667279872,
+          "arrival_us": 1794612467221519,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612465000000
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "local_capture_us": 1159782287185,
+          "arrival_us": 1794612582224807,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612580000000
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "local_capture_us": 1159897282676,
+          "arrival_us": 1794612697216273,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612695000000
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "local_capture_us": 1160012291844,
+          "arrival_us": 1794612812221416,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612810000000
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "local_capture_us": 1160127299321,
+          "arrival_us": 1794612927224868,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612925000000
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "local_capture_us": 1160242298578,
+          "arrival_us": 1794613042220100,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613040000000
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "local_capture_us": 1160357302384,
+          "arrival_us": 1794613157219881,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613155000000
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "local_capture_us": 1160472307488,
+          "arrival_us": 1794613272220960,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613270000000
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "local_capture_us": 1160587312121,
+          "arrival_us": 1794613387221568,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613385000000
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "local_capture_us": 1160702321081,
+          "arrival_us": 1794613502226503,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "local_capture_us": 1160817318097,
+          "arrival_us": 1794613617219494,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613615000000
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "local_capture_us": 1160932318911,
+          "arrival_us": 1794613732216283,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613730000000
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "local_capture_us": 1161047323965,
+          "arrival_us": 1794613847217312,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613845000000
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "local_capture_us": 1161162328824,
+          "arrival_us": 1794613962218146,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613960000000
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "local_capture_us": 1161277344510,
+          "arrival_us": 1794614077229807,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614075000000
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "local_capture_us": 1161392345725,
+          "arrival_us": 1794614192226997,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614190000000
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "local_capture_us": 1161507343360,
+          "arrival_us": 1794614307220607,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614305000000
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "local_capture_us": 1161622348454,
+          "arrival_us": 1794614422221676,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614420000000
+        },
+        {
+          "source_seq": 20,
+          "kind": "calibration",
+          "local_capture_us": 1161737353848,
+          "arrival_us": 1794614537223045,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614535000000
+        },
+        {
+          "source_seq": 21,
+          "kind": "sound",
+          "local_capture_us": 1161753331594,
+          "arrival_us": 1794614553200232,
+          "truth_source": "A",
+          "truth_call_index": 0,
+          "emission_us": 1794614550000000
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "local_capture_us": 1161852364730,
+          "arrival_us": 1794614652229902,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614650000000
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "local_capture_us": 1161967362630,
+          "arrival_us": 1794614767223777,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614765000000
+        }
+      ]
+    },
+    {
+      "station_id": "S1",
+      "boot_id": "b1",
+      "phase": "early",
+      "upload_s": 467.47920390794184,
+      "declare_through_ref_s": 422.122124,
+      "declare_complete": false,
+      "records": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:05:02.174032",
+          "features": [
+            0.010229,
+            -0.004522,
+            -0.006301,
+            -0.0186
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:07:02.181250",
+          "features": [
+            -0.033827,
+            -0.034878,
+            -0.017792,
+            -0.009364
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:09:02.180974",
+          "features": [
+            -0.01479,
+            -0.006881,
+            -0.002128,
+            0.012642
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:29:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:11:02.192880",
+          "features": [
+            -0.040287,
+            -0.006432,
+            -0.002123,
+            -0.016345
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:31:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:13:02.194317",
+          "features": [
+            -0.012235,
+            -0.009054,
+            -0.025296,
+            -0.019352
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:33:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:15:02.193110",
+          "features": [
+            -0.022396,
+            0.019547,
+            0.022036,
+            0.003145
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:35:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:17:02.192360",
+          "features": [
+            -0.012674,
+            0.016846,
+            -0.036224,
+            -0.00368
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:37:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:19:02.202796",
+          "features": [
+            0.020834,
+            0.000536,
+            -0.017609,
+            0.018929
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:39:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:21:02.205507",
+          "features": [
+            0.01263,
+            0.022574,
+            0.01718,
+            0.006904
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:41:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:23:02.214155",
+          "features": [
+            -0.008552,
+            -0.007451,
+            -0.000262,
+            0.018476
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:43:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:25:02.218184",
+          "features": [
+            -0.010441,
+            0.048601,
+            0.007103,
+            -0.011085
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:45:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:27:02.227219",
+          "features": [
+            -0.034028,
+            -0.007068,
+            -0.006819,
+            0.012466
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:47:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:29:02.228644",
+          "features": [
+            0.002828,
+            -0.00177,
+            0.030665,
+            0.020969
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:49:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:31:02.223617",
+          "features": [
+            0.012299,
+            -0.019263,
+            -0.020533,
+            -0.029403
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:51:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:33:02.237807",
+          "features": [
+            -0.003557,
+            -0.039439,
+            0.028133,
+            -0.001925
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:53:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:35:02.242129",
+          "features": [
+            0.002304,
+            0.002484,
+            0.028484,
+            -0.005269
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:55:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:37:02.242010",
+          "features": [
+            0.020807,
+            0.02983,
+            0.032198,
+            -0.013436
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:57:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:39:02.247390",
+          "features": [
+            0.035825,
+            0.000885,
+            0.01062,
+            0.02001
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-13T23:59:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:41:02.251319",
+          "features": [
+            -0.023578,
+            -0.031279,
+            -0.012779,
+            0.018455
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:01:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 20,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:42:32.508633",
+          "features": [
+            0.404924,
+            1.000196,
+            0.495822
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:43:02.247086",
+          "features": [
+            0.014494,
+            -0.00551,
+            -0.044601,
+            -0.017501
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:03:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:45:02.262641",
+          "features": [
+            0.026189,
+            -0.005938,
+            -0.00939,
+            0.038806
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:05:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:47:02.262898",
+          "features": [
+            0.005856,
+            0.016508,
+            -0.000691,
+            -0.003907
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:07:00.000000Z"
+          }
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 1,
+          "kind": "calibration",
+          "local_capture_us": 1159502174032,
+          "arrival_us": 1794612302121458,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612300000000
+        },
+        {
+          "source_seq": 2,
+          "kind": "calibration",
+          "local_capture_us": 1159622181250,
+          "arrival_us": 1794612422124476,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612420000000
+        },
+        {
+          "source_seq": 3,
+          "kind": "calibration",
+          "local_capture_us": 1159742180974,
+          "arrival_us": 1794612542120000,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612540000000
+        },
+        {
+          "source_seq": 4,
+          "kind": "calibration",
+          "local_capture_us": 1159862192880,
+          "arrival_us": 1794612662127706,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612660000000
+        },
+        {
+          "source_seq": 5,
+          "kind": "calibration",
+          "local_capture_us": 1159982194317,
+          "arrival_us": 1794612782124943,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612780000000
+        },
+        {
+          "source_seq": 6,
+          "kind": "calibration",
+          "local_capture_us": 1160102193110,
+          "arrival_us": 1794612902119536,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794612900000000
+        },
+        {
+          "source_seq": 7,
+          "kind": "calibration",
+          "local_capture_us": 1160222192360,
+          "arrival_us": 1794613022114586,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613020000000
+        },
+        {
+          "source_seq": 8,
+          "kind": "calibration",
+          "local_capture_us": 1160342202796,
+          "arrival_us": 1794613142120822,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613140000000
+        },
+        {
+          "source_seq": 9,
+          "kind": "calibration",
+          "local_capture_us": 1160462205507,
+          "arrival_us": 1794613262119333,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613260000000
+        },
+        {
+          "source_seq": 10,
+          "kind": "calibration",
+          "local_capture_us": 1160582214155,
+          "arrival_us": 1794613382123781,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613380000000
+        },
+        {
+          "source_seq": 11,
+          "kind": "calibration",
+          "local_capture_us": 1160702218184,
+          "arrival_us": 1794613502123610,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613500000000
+        },
+        {
+          "source_seq": 12,
+          "kind": "calibration",
+          "local_capture_us": 1160822227219,
+          "arrival_us": 1794613622128445,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613620000000
+        },
+        {
+          "source_seq": 13,
+          "kind": "calibration",
+          "local_capture_us": 1160942228644,
+          "arrival_us": 1794613742125670,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613740000000
+        },
+        {
+          "source_seq": 14,
+          "kind": "calibration",
+          "local_capture_us": 1161062223617,
+          "arrival_us": 1794613862116443,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613860000000
+        },
+        {
+          "source_seq": 15,
+          "kind": "calibration",
+          "local_capture_us": 1161182237807,
+          "arrival_us": 1794613982126433,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794613980000000
+        },
+        {
+          "source_seq": 16,
+          "kind": "calibration",
+          "local_capture_us": 1161302242129,
+          "arrival_us": 1794614102126555,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614100000000
+        },
+        {
+          "source_seq": 17,
+          "kind": "calibration",
+          "local_capture_us": 1161422242010,
+          "arrival_us": 1794614222122236,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614220000000
+        },
+        {
+          "source_seq": 18,
+          "kind": "calibration",
+          "local_capture_us": 1161542247390,
+          "arrival_us": 1794614342123416,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614340000000
+        },
+        {
+          "source_seq": 19,
+          "kind": "calibration",
+          "local_capture_us": 1161662251319,
+          "arrival_us": 1794614462123145,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614460000000
+        },
+        {
+          "source_seq": 20,
+          "kind": "sound",
+          "local_capture_us": 1161752508633,
+          "arrival_us": 1794614552377300,
+          "truth_source": "A",
+          "truth_call_index": 0,
+          "emission_us": 1794614550000000
+        },
+        {
+          "source_seq": 21,
+          "kind": "calibration",
+          "local_capture_us": 1161782247086,
+          "arrival_us": 1794614582114712,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614580000000
+        },
+        {
+          "source_seq": 22,
+          "kind": "calibration",
+          "local_capture_us": 1161902262641,
+          "arrival_us": 1794614702126067,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614700000000
+        },
+        {
+          "source_seq": 23,
+          "kind": "calibration",
+          "local_capture_us": 1162022262898,
+          "arrival_us": 1794614822122124,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614820000000
+        }
+      ]
+    },
+    {
+      "station_id": "S2",
+      "boot_id": "b1",
+      "phase": "late",
+      "upload_s": 2351.030356,
+      "declare_through_ref_s": 2351.030356,
+      "declare_complete": true,
+      "records": [
+        {
+          "source_seq": 43,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:45:03.228744",
+          "features": [
+            0.009377,
+            0.048474,
+            -0.018552,
+            0.013792
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:05:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 44,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:46:09.966864",
+          "features": [
+            0.011438,
+            -0.00555,
+            0.010624,
+            -0.030986
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:06:05.000000Z"
+          }
+        },
+        {
+          "source_seq": 45,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:47:01.171092",
+          "features": [
+            0.686355,
+            0.56278,
+            0.80558
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 46,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:47:03.235912",
+          "features": [
+            -0.00718,
+            0.017833,
+            0.002035,
+            -0.017061
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:07:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 47,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:48:04.968926",
+          "features": [
+            0.007316,
+            0.024794,
+            0.005357,
+            -0.025677
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:08:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 48,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:03.246267",
+          "features": [
+            -0.038884,
+            0.020665,
+            0.006498,
+            -0.014041
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:09:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 49,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:59.977060",
+          "features": [
+            -0.021792,
+            -0.020544,
+            -0.000493,
+            -0.03875
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:09:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 50,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:03.243599",
+          "features": [
+            -0.0269,
+            0.034063,
+            0.019783,
+            0.036419
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:11:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 51,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:54.981691",
+          "features": [
+            0.034098,
+            -0.01567,
+            -0.008395,
+            -0.049657
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:11:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 52,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:03.254084",
+          "features": [
+            0.01276,
+            0.00418,
+            -0.006479,
+            0.015783
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:13:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 53,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:53:21.184392",
+          "features": [
+            0.373993,
+            0.990885,
+            0.502445
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 54,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:49.973505",
+          "features": [
+            0.016144,
+            0.004184,
+            0.009496,
+            0.00883
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:13:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 55,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:03.258463",
+          "features": [
+            0.021074,
+            0.008693,
+            -0.003785,
+            0.008929
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:15:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 56,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:44.980422",
+          "features": [
+            -0.015803,
+            0.003873,
+            0.018788,
+            0.008521
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:15:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 57,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:03.255498",
+          "features": [
+            -0.015267,
+            0.010418,
+            0.009937,
+            0.003535
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:17:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 58,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:39.991520",
+          "features": [
+            0.007075,
+            -0.024193,
+            0.008527,
+            0.00358
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:17:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 59,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:58:21.194892",
+          "features": [
+            0.722181,
+            0.568637,
+            0.829875
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 60,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:03.263990",
+          "features": [
+            0.021377,
+            0.011927,
+            0.018165,
+            -0.004247
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:19:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 61,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:34.991076",
+          "features": [
+            0.0239,
+            -0.012946,
+            0.016226,
+            0.044378
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:19:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 62,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:03.270126",
+          "features": [
+            0.007188,
+            0.022594,
+            0.015658,
+            0.000487
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:21:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 63,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:30.001680",
+          "features": [
+            -0.011555,
+            0.002897,
+            0.025219,
+            0.002357
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:21:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 64,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:03.271832",
+          "features": [
+            -0.040177,
+            -0.013658,
+            0.011369,
+            0.011328
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:23:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 65,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:25.004703",
+          "features": [
+            0.014669,
+            0.017628,
+            -0.049145,
+            0.003381
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:23:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 66,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:04:11.207142",
+          "features": [
+            0.399639,
+            0.98539,
+            0.49964
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 67,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:03.281517",
+          "features": [
+            -0.037948,
+            -0.001042,
+            0.012607,
+            -0.035241
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 68,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:20.003016",
+          "features": [
+            0.003164,
+            -0.013816,
+            -0.031946,
+            0.021862
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:25:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 69,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:07:03.276728",
+          "features": [
+            -0.010108,
+            -0.021203,
+            -0.021532,
+            -0.001626
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 70,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:09:11.217642",
+          "features": [
+            0.748851,
+            0.539703,
+            0.789066
+          ],
+          "uncertainty_ms": 25.0
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 43,
+          "kind": "calibration",
+          "local_capture_us": 1161903228744,
+          "arrival_us": 1794614703092136,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614700000000
+        },
+        {
+          "source_seq": 44,
+          "kind": "calibration",
+          "local_capture_us": 1161969966864,
+          "arrival_us": 1794614769827920,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614765000000
+        },
+        {
+          "source_seq": 45,
+          "kind": "sound",
+          "local_capture_us": 1162021171092,
+          "arrival_us": 1794614821030356,
+          "truth_source": "B",
+          "truth_call_index": 0,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 46,
+          "kind": "calibration",
+          "local_capture_us": 1162023235912,
+          "arrival_us": 1794614823095104,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 47,
+          "kind": "calibration",
+          "local_capture_us": 1162084968926,
+          "arrival_us": 1794614884825957,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614880000000
+        },
+        {
+          "source_seq": 48,
+          "kind": "calibration",
+          "local_capture_us": 1162143246267,
+          "arrival_us": 1794614943101258,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614940000000
+        },
+        {
+          "source_seq": 49,
+          "kind": "calibration",
+          "local_capture_us": 1162199977060,
+          "arrival_us": 1794614999830066,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614995000000
+        },
+        {
+          "source_seq": 50,
+          "kind": "calibration",
+          "local_capture_us": 1162263243599,
+          "arrival_us": 1794615063094391,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615060000000
+        },
+        {
+          "source_seq": 51,
+          "kind": "calibration",
+          "local_capture_us": 1162314981691,
+          "arrival_us": 1794615114830672,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615110000000
+        },
+        {
+          "source_seq": 52,
+          "kind": "calibration",
+          "local_capture_us": 1162383254084,
+          "arrival_us": 1794615183100675,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615180000000
+        },
+        {
+          "source_seq": 53,
+          "kind": "sound",
+          "local_capture_us": 1162401184392,
+          "arrival_us": 1794615201030356,
+          "truth_source": "A",
+          "truth_call_index": 1,
+          "emission_us": 1794615200000000
+        },
+        {
+          "source_seq": 54,
+          "kind": "calibration",
+          "local_capture_us": 1162429973505,
+          "arrival_us": 1794615229818461,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615225000000
+        },
+        {
+          "source_seq": 55,
+          "kind": "calibration",
+          "local_capture_us": 1162503258463,
+          "arrival_us": 1794615303100854,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615300000000
+        },
+        {
+          "source_seq": 56,
+          "kind": "calibration",
+          "local_capture_us": 1162544980422,
+          "arrival_us": 1794615344821353,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615340000000
+        },
+        {
+          "source_seq": 57,
+          "kind": "calibration",
+          "local_capture_us": 1162623255498,
+          "arrival_us": 1794615423093690,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615420000000
+        },
+        {
+          "source_seq": 58,
+          "kind": "calibration",
+          "local_capture_us": 1162659991520,
+          "arrival_us": 1794615459828426,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615455000000
+        },
+        {
+          "source_seq": 59,
+          "kind": "sound",
+          "local_capture_us": 1162701194892,
+          "arrival_us": 1794615501030356,
+          "truth_source": "B",
+          "truth_call_index": 1,
+          "emission_us": 1794615500000000
+        },
+        {
+          "source_seq": 60,
+          "kind": "calibration",
+          "local_capture_us": 1162743263990,
+          "arrival_us": 1794615543097982,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615540000000
+        },
+        {
+          "source_seq": 61,
+          "kind": "calibration",
+          "local_capture_us": 1162774991076,
+          "arrival_us": 1794615574823957,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615570000000
+        },
+        {
+          "source_seq": 62,
+          "kind": "calibration",
+          "local_capture_us": 1162863270126,
+          "arrival_us": 1794615663099918,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615660000000
+        },
+        {
+          "source_seq": 63,
+          "kind": "calibration",
+          "local_capture_us": 1162890001680,
+          "arrival_us": 1794615689830536,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615685000000
+        },
+        {
+          "source_seq": 64,
+          "kind": "calibration",
+          "local_capture_us": 1162983271832,
+          "arrival_us": 1794615783097424,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615780000000
+        },
+        {
+          "source_seq": 65,
+          "kind": "calibration",
+          "local_capture_us": 1163005004703,
+          "arrival_us": 1794615804829534,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615800000000
+        },
+        {
+          "source_seq": 66,
+          "kind": "sound",
+          "local_capture_us": 1163051207142,
+          "arrival_us": 1794615851030356,
+          "truth_source": "A",
+          "truth_call_index": 2,
+          "emission_us": 1794615850000000
+        },
+        {
+          "source_seq": 67,
+          "kind": "calibration",
+          "local_capture_us": 1163103281517,
+          "arrival_us": 1794615903102908,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615900000000
+        },
+        {
+          "source_seq": 68,
+          "kind": "calibration",
+          "local_capture_us": 1163120003016,
+          "arrival_us": 1794615919823822,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615915000000
+        },
+        {
+          "source_seq": 69,
+          "kind": "calibration",
+          "local_capture_us": 1163223276728,
+          "arrival_us": 1794616023093920,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794616020000000
+        },
+        {
+          "source_seq": 70,
+          "kind": "sound",
+          "local_capture_us": 1163351217642,
+          "arrival_us": 1794616151030356,
+          "truth_source": "B",
+          "truth_call_index": 2,
+          "emission_us": 1794616150000000
+        }
+      ]
+    },
+    {
+      "station_id": "S3",
+      "boot_id": "b1",
+      "phase": "late",
+      "upload_s": 2351.6098469999997,
+      "declare_through_ref_s": 2351.6098469999997,
+      "declare_complete": true,
+      "records": [
+        {
+          "source_seq": 43,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:45:04.707610",
+          "features": [
+            -0.002404,
+            0.011224,
+            0.018052,
+            -0.018115
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:05:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 44,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:46:08.466057",
+          "features": [
+            -0.030897,
+            -0.013929,
+            -0.011124,
+            -0.008023
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:06:05.000000Z"
+          }
+        },
+        {
+          "source_seq": 45,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:47:01.750603",
+          "features": [
+            0.711186,
+            0.559576,
+            0.792719
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 46,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:47:04.700898",
+          "features": [
+            0.053334,
+            0.022798,
+            0.012748,
+            -0.051858
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:07:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 47,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:48:03.477004",
+          "features": [
+            0.044167,
+            -0.039697,
+            -0.000783,
+            0.008346
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:08:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 48,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:04.713766",
+          "features": [
+            0.036187,
+            -0.028048,
+            -0.013327,
+            0.005825
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:09:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 49,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:58.470026",
+          "features": [
+            -0.008731,
+            0.009015,
+            -0.014035,
+            -0.017642
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:09:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 50,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:04.715904",
+          "features": [
+            -0.017442,
+            0.005213,
+            -0.043201,
+            -0.014962
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:11:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 51,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:53.482690",
+          "features": [
+            -0.014494,
+            -0.000668,
+            0.010451,
+            -0.027171
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:11:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 52,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:04.717062",
+          "features": [
+            -0.016522,
+            -0.012519,
+            -7e-06,
+            -0.002192
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:13:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 53,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:53:21.763903",
+          "features": [
+            0.401196,
+            1.01101,
+            0.511498
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 54,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:48.484334",
+          "features": [
+            -0.004473,
+            0.017472,
+            -0.008198,
+            0.014559
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:13:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 55,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:04.717201",
+          "features": [
+            -0.037923,
+            0.001191,
+            -0.01861,
+            0.014797
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:15:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 56,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:43.485238",
+          "features": [
+            -0.000835,
+            0.02704,
+            -0.007816,
+            -0.010994
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:15:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 57,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:04.731200",
+          "features": [
+            0.01413,
+            -0.00042,
+            0.011933,
+            0.033092
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:17:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 58,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:38.483166",
+          "features": [
+            0.015457,
+            -0.005608,
+            -0.006709,
+            0.015916
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:17:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 59,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:58:21.774403",
+          "features": [
+            0.691186,
+            0.562849,
+            0.822942
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 60,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:04.739650",
+          "features": [
+            0.0248,
+            -0.004309,
+            0.001812,
+            0.051904
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:19:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 61,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:33.481028",
+          "features": [
+            -0.00869,
+            0.01001,
+            -0.001857,
+            -0.013369
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:19:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 62,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:04.737078",
+          "features": [
+            0.010797,
+            0.004121,
+            0.001104,
+            -0.004867
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:21:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 63,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:28.489653",
+          "features": [
+            -0.033919,
+            0.023652,
+            0.014809,
+            -0.016315
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:21:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 64,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:04.737646",
+          "features": [
+            -0.004642,
+            -0.028336,
+            0.036556,
+            0.010319
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:23:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 65,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:23.501211",
+          "features": [
+            0.051038,
+            -0.019075,
+            -0.006585,
+            0.000717
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:23:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 66,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:04:11.786653",
+          "features": [
+            0.397534,
+            1.031149,
+            0.460903
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 67,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:04.734761",
+          "features": [
+            -0.021302,
+            -0.012584,
+            -0.028057,
+            0.000633
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 68,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:18.504481",
+          "features": [
+            -0.011173,
+            0.004019,
+            0.019803,
+            -0.01955
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:25:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 69,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:07:04.746286",
+          "features": [
+            0.009807,
+            -0.031738,
+            -0.024753,
+            -0.000462
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 70,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:09:11.797153",
+          "features": [
+            0.70876,
+            0.569651,
+            0.798825
+          ],
+          "uncertainty_ms": 25.0
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 43,
+          "kind": "calibration",
+          "local_capture_us": 1161904707610,
+          "arrival_us": 1794614704570950,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614700000000
+        },
+        {
+          "source_seq": 44,
+          "kind": "calibration",
+          "local_capture_us": 1161968466057,
+          "arrival_us": 1794614768327166,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614765000000
+        },
+        {
+          "source_seq": 45,
+          "kind": "sound",
+          "local_capture_us": 1162021750603,
+          "arrival_us": 1794614821609847,
+          "truth_source": "B",
+          "truth_call_index": 0,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 46,
+          "kind": "calibration",
+          "local_capture_us": 1162024700898,
+          "arrival_us": 1794614824560038,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 47,
+          "kind": "calibration",
+          "local_capture_us": 1162083477004,
+          "arrival_us": 1794614883334087,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614880000000
+        },
+        {
+          "source_seq": 48,
+          "kind": "calibration",
+          "local_capture_us": 1162144713766,
+          "arrival_us": 1794614944568706,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614940000000
+        },
+        {
+          "source_seq": 49,
+          "kind": "calibration",
+          "local_capture_us": 1162198470026,
+          "arrival_us": 1794614998323085,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614995000000
+        },
+        {
+          "source_seq": 50,
+          "kind": "calibration",
+          "local_capture_us": 1162264715904,
+          "arrival_us": 1794615064566644,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615060000000
+        },
+        {
+          "source_seq": 51,
+          "kind": "calibration",
+          "local_capture_us": 1162313482690,
+          "arrival_us": 1794615113331723,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615110000000
+        },
+        {
+          "source_seq": 52,
+          "kind": "calibration",
+          "local_capture_us": 1162384717062,
+          "arrival_us": 1794615184563602,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615180000000
+        },
+        {
+          "source_seq": 53,
+          "kind": "sound",
+          "local_capture_us": 1162401763903,
+          "arrival_us": 1794615201609847,
+          "truth_source": "A",
+          "truth_call_index": 1,
+          "emission_us": 1794615200000000
+        },
+        {
+          "source_seq": 54,
+          "kind": "calibration",
+          "local_capture_us": 1162428484334,
+          "arrival_us": 1794615228329342,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615225000000
+        },
+        {
+          "source_seq": 55,
+          "kind": "calibration",
+          "local_capture_us": 1162504717201,
+          "arrival_us": 1794615304559541,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615300000000
+        },
+        {
+          "source_seq": 56,
+          "kind": "calibration",
+          "local_capture_us": 1162543485238,
+          "arrival_us": 1794615343326222,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615340000000
+        },
+        {
+          "source_seq": 57,
+          "kind": "calibration",
+          "local_capture_us": 1162624731200,
+          "arrival_us": 1794615424569340,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615420000000
+        },
+        {
+          "source_seq": 58,
+          "kind": "calibration",
+          "local_capture_us": 1162658483166,
+          "arrival_us": 1794615458320125,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615455000000
+        },
+        {
+          "source_seq": 59,
+          "kind": "sound",
+          "local_capture_us": 1162701774403,
+          "arrival_us": 1794615501609847,
+          "truth_source": "B",
+          "truth_call_index": 1,
+          "emission_us": 1794615500000000
+        },
+        {
+          "source_seq": 60,
+          "kind": "calibration",
+          "local_capture_us": 1162744739650,
+          "arrival_us": 1794615544573590,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615540000000
+        },
+        {
+          "source_seq": 61,
+          "kind": "calibration",
+          "local_capture_us": 1162773481028,
+          "arrival_us": 1794615573313962,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615570000000
+        },
+        {
+          "source_seq": 62,
+          "kind": "calibration",
+          "local_capture_us": 1162864737078,
+          "arrival_us": 1794615664566818,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615660000000
+        },
+        {
+          "source_seq": 63,
+          "kind": "calibration",
+          "local_capture_us": 1162888489653,
+          "arrival_us": 1794615688318562,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615685000000
+        },
+        {
+          "source_seq": 64,
+          "kind": "calibration",
+          "local_capture_us": 1162984737646,
+          "arrival_us": 1794615784563186,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615780000000
+        },
+        {
+          "source_seq": 65,
+          "kind": "calibration",
+          "local_capture_us": 1163003501211,
+          "arrival_us": 1794615803326095,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615800000000
+        },
+        {
+          "source_seq": 66,
+          "kind": "sound",
+          "local_capture_us": 1163051786653,
+          "arrival_us": 1794615851609847,
+          "truth_source": "A",
+          "truth_call_index": 2,
+          "emission_us": 1794615850000000
+        },
+        {
+          "source_seq": 67,
+          "kind": "calibration",
+          "local_capture_us": 1163104734761,
+          "arrival_us": 1794615904556102,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615900000000
+        },
+        {
+          "source_seq": 68,
+          "kind": "calibration",
+          "local_capture_us": 1163118504481,
+          "arrival_us": 1794615918325340,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615915000000
+        },
+        {
+          "source_seq": 69,
+          "kind": "calibration",
+          "local_capture_us": 1163224746286,
+          "arrival_us": 1794616024563426,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794616020000000
+        },
+        {
+          "source_seq": 70,
+          "kind": "sound",
+          "local_capture_us": 1163351797153,
+          "arrival_us": 1794616151609847,
+          "truth_source": "B",
+          "truth_call_index": 2,
+          "emission_us": 1794616150000000
+        }
+      ]
+    },
+    {
+      "station_id": "S1",
+      "boot_id": "b1",
+      "phase": "late",
+      "upload_s": 2352.3773,
+      "declare_through_ref_s": 2352.3773,
+      "declare_complete": true,
+      "records": [
+        {
+          "source_seq": 24,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:47:02.518083",
+          "features": [
+            0.721919,
+            0.557786,
+            0.795464
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:02.269941",
+          "features": [
+            0.009614,
+            0.033682,
+            0.008555,
+            -0.00135
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:09:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:02.272389",
+          "features": [
+            -0.00797,
+            -0.019484,
+            0.042409,
+            0.020748
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:11:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:02.275619",
+          "features": [
+            0.010455,
+            -0.014551,
+            -0.002484,
+            0.009171
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:13:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 28,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:53:22.531383",
+          "features": [
+            0.403049,
+            0.989038,
+            0.500724
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:02.280683",
+          "features": [
+            -1e-05,
+            0.003517,
+            -0.002686,
+            -0.025169
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:15:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:02.279919",
+          "features": [
+            -0.05257,
+            -0.02079,
+            0.031562,
+            -0.007636
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:17:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 31,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:58:22.541883",
+          "features": [
+            0.731316,
+            0.536859,
+            0.799504
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:02.292340",
+          "features": [
+            0.020475,
+            -0.021657,
+            -0.002969,
+            0.014597
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:19:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:02.291282",
+          "features": [
+            0.017483,
+            0.019609,
+            0.000132,
+            -0.023343
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:21:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:02.299600",
+          "features": [
+            -0.021084,
+            -0.012574,
+            9.9e-05,
+            -0.029279
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:23:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 35,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:04:12.554133",
+          "features": [
+            0.395302,
+            0.997305,
+            0.474129
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:02.305429",
+          "features": [
+            -0.017647,
+            -0.003705,
+            -0.03639,
+            0.01561
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:25:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:07:02.306254",
+          "features": [
+            0.01268,
+            0.01404,
+            0.030053,
+            0.023286
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C1",
+            "emission_reference_at": "2026-11-14T00:27:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 38,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:09:12.564633",
+          "features": [
+            0.706327,
+            0.5228,
+            0.785037
+          ],
+          "uncertainty_ms": 25.0
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 24,
+          "kind": "sound",
+          "local_capture_us": 1162022518083,
+          "arrival_us": 1794614822377300,
+          "truth_source": "B",
+          "truth_call_index": 0,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "local_capture_us": 1162142269941,
+          "arrival_us": 1794614942124967,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614940000000
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "local_capture_us": 1162262272389,
+          "arrival_us": 1794615062123215,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615060000000
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "local_capture_us": 1162382275619,
+          "arrival_us": 1794615182122245,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615180000000
+        },
+        {
+          "source_seq": 28,
+          "kind": "sound",
+          "local_capture_us": 1162402531383,
+          "arrival_us": 1794615202377300,
+          "truth_source": "A",
+          "truth_call_index": 1,
+          "emission_us": 1794615200000000
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "local_capture_us": 1162502280683,
+          "arrival_us": 1794615302123109,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615300000000
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "local_capture_us": 1162622279919,
+          "arrival_us": 1794615422118145,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615420000000
+        },
+        {
+          "source_seq": 31,
+          "kind": "sound",
+          "local_capture_us": 1162702541883,
+          "arrival_us": 1794615502377300,
+          "truth_source": "B",
+          "truth_call_index": 1,
+          "emission_us": 1794615500000000
+        },
+        {
+          "source_seq": 32,
+          "kind": "calibration",
+          "local_capture_us": 1162742292340,
+          "arrival_us": 1794615542126366,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615540000000
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "local_capture_us": 1162862291282,
+          "arrival_us": 1794615662121108,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615660000000
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "local_capture_us": 1162982299600,
+          "arrival_us": 1794615782125226,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615780000000
+        },
+        {
+          "source_seq": 35,
+          "kind": "sound",
+          "local_capture_us": 1163052554133,
+          "arrival_us": 1794615852377300,
+          "truth_source": "A",
+          "truth_call_index": 2,
+          "emission_us": 1794615850000000
+        },
+        {
+          "source_seq": 36,
+          "kind": "calibration",
+          "local_capture_us": 1163102305429,
+          "arrival_us": 1794615902126855,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615900000000
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "local_capture_us": 1163222306254,
+          "arrival_us": 1794616022123480,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794616020000000
+        },
+        {
+          "source_seq": 38,
+          "kind": "sound",
+          "local_capture_us": 1163352564633,
+          "arrival_us": 1794616152377300,
+          "truth_source": "B",
+          "truth_call_index": 2,
+          "emission_us": 1794616150000000
+        }
+      ]
+    },
+    {
+      "station_id": "S4",
+      "boot_id": "b1",
+      "phase": "late",
+      "upload_s": 2353.200232,
+      "declare_through_ref_s": 2353.200232,
+      "declare_complete": true,
+      "records": [
+        {
+          "source_seq": 24,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:47:03.341044",
+          "features": [
+            0.712349,
+            0.516298,
+            0.79953
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:48:02.367083",
+          "features": [
+            0.01338,
+            -0.005444,
+            -0.021077,
+            0.002059
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:08:00.000000Z"
+          }
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:49:57.365668",
+          "features": [
+            -0.000999,
+            -0.013293,
+            0.000242,
+            0.015004
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:09:55.000000Z"
+          }
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:51:52.373126",
+          "features": [
+            -0.000528,
+            -0.036521,
+            0.00584,
+            0.02389
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:11:50.000000Z"
+          }
+        },
+        {
+          "source_seq": 28,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:53:23.354344",
+          "features": [
+            0.408828,
+            0.995681,
+            0.499724
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:53:47.372039",
+          "features": [
+            -0.002167,
+            0.03462,
+            0.008912,
+            -0.003164
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:13:45.000000Z"
+          }
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:55:42.382872",
+          "features": [
+            0.001272,
+            -0.005571,
+            -0.011522,
+            -0.005138
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:15:40.000000Z"
+          }
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:57:37.388628",
+          "features": [
+            -0.013771,
+            0.008765,
+            -0.017521,
+            0.046285
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:17:35.000000Z"
+          }
+        },
+        {
+          "source_seq": 32,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T10:58:23.364844",
+          "features": [
+            0.732209,
+            0.54072,
+            0.789297
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T10:59:32.395978",
+          "features": [
+            0.00159,
+            -0.032888,
+            0.017083,
+            -0.034432
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:19:30.000000Z"
+          }
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:01:27.394833",
+          "features": [
+            0.009933,
+            0.012954,
+            -0.045178,
+            -0.006042
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:21:25.000000Z"
+          }
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:03:22.398964",
+          "features": [
+            -0.008867,
+            0.022945,
+            -0.015758,
+            0.005337
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:23:20.000000Z"
+          }
+        },
+        {
+          "source_seq": 36,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:04:13.377094",
+          "features": [
+            0.372619,
+            1.0147,
+            0.539812
+          ],
+          "uncertainty_ms": 25.0
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "class_label": "calibration",
+          "local_capture_at": "2026-11-14T11:05:17.399003",
+          "features": [
+            0.010783,
+            0.010523,
+            -0.006706,
+            -0.04214
+          ],
+          "uncertainty_ms": 12.0,
+          "calibration": {
+            "source_id": "C2",
+            "emission_reference_at": "2026-11-14T00:25:15.000000Z"
+          }
+        },
+        {
+          "source_seq": 38,
+          "kind": "sound",
+          "class_label": "croak",
+          "local_capture_at": "2026-11-14T11:09:13.387594",
+          "features": [
+            0.739633,
+            0.541253,
+            0.803319
+          ],
+          "uncertainty_ms": 25.0
+        }
+      ],
+      "truth": [
+        {
+          "source_seq": 24,
+          "kind": "sound",
+          "local_capture_us": 1162023341044,
+          "arrival_us": 1794614823200232,
+          "truth_source": "B",
+          "truth_call_index": 0,
+          "emission_us": 1794614820000000
+        },
+        {
+          "source_seq": 25,
+          "kind": "calibration",
+          "local_capture_us": 1162082367083,
+          "arrival_us": 1794614882224205,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614880000000
+        },
+        {
+          "source_seq": 26,
+          "kind": "calibration",
+          "local_capture_us": 1162197365668,
+          "arrival_us": 1794614997218765,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794614995000000
+        },
+        {
+          "source_seq": 27,
+          "kind": "calibration",
+          "local_capture_us": 1162312373126,
+          "arrival_us": 1794615112222198,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615110000000
+        },
+        {
+          "source_seq": 28,
+          "kind": "sound",
+          "local_capture_us": 1162403354344,
+          "arrival_us": 1794615203200232,
+          "truth_source": "A",
+          "truth_call_index": 1,
+          "emission_us": 1794615200000000
+        },
+        {
+          "source_seq": 29,
+          "kind": "calibration",
+          "local_capture_us": 1162427372039,
+          "arrival_us": 1794615227217086,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615225000000
+        },
+        {
+          "source_seq": 30,
+          "kind": "calibration",
+          "local_capture_us": 1162542382872,
+          "arrival_us": 1794615342223894,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615340000000
+        },
+        {
+          "source_seq": 31,
+          "kind": "calibration",
+          "local_capture_us": 1162657388628,
+          "arrival_us": 1794615457225625,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615455000000
+        },
+        {
+          "source_seq": 32,
+          "kind": "sound",
+          "local_capture_us": 1162703364844,
+          "arrival_us": 1794615503200232,
+          "truth_source": "B",
+          "truth_call_index": 1,
+          "emission_us": 1794615500000000
+        },
+        {
+          "source_seq": 33,
+          "kind": "calibration",
+          "local_capture_us": 1162772395978,
+          "arrival_us": 1794615572228950,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615570000000
+        },
+        {
+          "source_seq": 34,
+          "kind": "calibration",
+          "local_capture_us": 1162887394833,
+          "arrival_us": 1794615687223780,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615685000000
+        },
+        {
+          "source_seq": 35,
+          "kind": "calibration",
+          "local_capture_us": 1163002398964,
+          "arrival_us": 1794615802223886,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615800000000
+        },
+        {
+          "source_seq": 36,
+          "kind": "sound",
+          "local_capture_us": 1163053377094,
+          "arrival_us": 1794615853200232,
+          "truth_source": "A",
+          "truth_call_index": 2,
+          "emission_us": 1794615850000000
+        },
+        {
+          "source_seq": 37,
+          "kind": "calibration",
+          "local_capture_us": 1163117399003,
+          "arrival_us": 1794615917219900,
+          "truth_source": null,
+          "truth_call_index": null,
+          "emission_us": 1794615915000000
+        },
+        {
+          "source_seq": 38,
+          "kind": "sound",
+          "local_capture_us": 1163353387594,
+          "arrival_us": 1794616153200232,
+          "truth_source": "B",
+          "truth_call_index": 2,
+          "emission_us": 1794616150000000
+        }
+      ]
+    }
+  ],
+  "expected": {
+    "events": 6,
+    "collinear": true,
+    "min_regions_max": 6,
+    "mirror_pair_y": [
+      180.0,
+      820.0
+    ],
+    "note": "every event must expose at least two feasible regions"
+  }
+}
