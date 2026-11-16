@@ -68,6 +68,18 @@ class Settings:
     localization_slack_ms: float = _env_float("LOCALIZATION_SLACK_MS", 25.0)
     definite_region_max_extent_m: float = _env_float("DEFINITE_REGION_MAX_EXTENT_M", 200.0)
 
+    # Observation-capability coverage maps
+    capability_grid_size_m: float = _env_float("CAPABILITY_GRID_SIZE_M", 250.0)
+    # Smallest subtended station-array angle (degrees) that still counts as a
+    # non-degenerate geometry for reliable localization.
+    min_localization_angle_deg: float = _env_float("MIN_LOCALIZATION_ANGLE_DEG", 15.0)
+    # Condition number of the linearized TDOA covariance above which the
+    # analytic uncertainty is declared degenerate (the grid range still ships,
+    # but the event cannot be called reliably localized).
+    covariance_max_condition: float = _env_float("COVARIANCE_MAX_CONDITION", 1.0e4)
+    # Published analytic ellipses use this sigma multiplier (2 ~= 95%).
+    covariance_sigma_k: float = _env_float("COVARIANCE_SIGMA_K", 2.0)
+
     # Association
     feature_distance_limit: float = _env_float("FEATURE_DISTANCE_LIMIT", 0.25)
     association_time_slack_ms: float = _env_float("ASSOCIATION_TIME_SLACK_MS", 150.0)

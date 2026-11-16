@@ -148,7 +148,7 @@
         "tags": [
           "stations"
         ],
-        "summary": "Update a station",
+        "summary": "Update a station; coordinate changes are frozen as corrections",
         "operationId": "update_station_stations__station_id__put",
         "parameters": [
           {
@@ -178,6 +178,57 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/stations/{station_id}/coordinate-corrections": {
+      "get": {
+        "tags": [
+          "stations"
+        ],
+        "summary": "History of station coordinate corrections",
+        "operationId": "list_coordinate_corrections_stations__station_id__coordinate_corrections_get",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Station Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoordinateCorrectionOut"
+                  },
+                  "title": "Response List Coordinate Corrections Stations  Station Id  Coordinate Corrections Get"
                 }
               }
             }
@@ -1641,6 +1692,465 @@
           }
         ]
       }
+    },
+    "/propagation-profiles": {
+      "get": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "List approved propagation parameter sets",
+        "operationId": "list_propagation_profiles_propagation_profiles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PropagationProfileOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Propagation Profiles Propagation Profiles Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Approve a versioned propagation parameter set with a validity interval",
+        "operationId": "create_propagation_profile_propagation_profiles_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropagationProfileCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropagationProfileOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/events/{event_id}/context": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Frozen station coordinates, timing residuals, sensitivity, downtime and propagation used",
+        "operationId": "event_context_events__event_id__context_get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventContextOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/coverage/maps": {
+      "post": {
+        "tags": [
+          "coverage"
+        ],
+        "summary": "Publish an immutable observation-capability map for a grid, period and species scope",
+        "operationId": "create_coverage_map_coverage_maps_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoverageMapRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageMapOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "coverage"
+        ],
+        "summary": "List coverage map versions (superseded maps are hidden by default)",
+        "operationId": "list_coverage_maps_coverage_maps_get",
+        "parameters": [
+          {
+            "name": "class_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Class Label"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "include_superseded",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Superseded"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoverageMapOut"
+                  },
+                  "title": "Response List Coverage Maps Coverage Maps Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/coverage/maps/{map_version}": {
+      "get": {
+        "tags": [
+          "coverage"
+        ],
+        "summary": "Fetch one coverage map version, including superseded ones for replay",
+        "operationId": "get_coverage_map_coverage_maps__map_version__get",
+        "parameters": [
+          {
+            "name": "map_version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Map Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageMapOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/coverage/maps/{map_version}/cells": {
+      "get": {
+        "tags": [
+          "coverage"
+        ],
+        "summary": "List a map's grid cells with their observation-capability state",
+        "operationId": "list_coverage_cells_coverage_maps__map_version__cells_get",
+        "parameters": [
+          {
+            "name": "map_version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Map Version"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 5000,
+              "minimum": 1,
+              "default": 500,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageCellList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/coverage/maps/{map_version}/cells/{ix}/{iy}/evidence": {
+      "get": {
+        "tags": [
+          "coverage"
+        ],
+        "summary": "Trace one cell's conclusion back to the frozen events that produced it",
+        "operationId": "cell_evidence_coverage_maps__map_version__cells__ix___iy__evidence_get",
+        "parameters": [
+          {
+            "name": "map_version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Map Version"
+            }
+          },
+          {
+            "name": "ix",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Ix"
+            }
+          },
+          {
+            "name": "iy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Iy"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageCellEvidence"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2233,6 +2743,373 @@
           "resolution_note"
         ],
         "title": "ConflictOut"
+      },
+      "CoordinateCorrectionOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "station_id": {
+            "type": "string",
+            "title": "Station Id"
+          },
+          "old_x": {
+            "type": "number",
+            "title": "Old X"
+          },
+          "old_y": {
+            "type": "number",
+            "title": "Old Y"
+          },
+          "new_x": {
+            "type": "number",
+            "title": "New X"
+          },
+          "new_y": {
+            "type": "number",
+            "title": "New Y"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "applied_by": {
+            "type": "string",
+            "title": "Applied By"
+          },
+          "applied_at": {
+            "type": "string",
+            "title": "Applied At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "station_id",
+          "old_x",
+          "old_y",
+          "new_x",
+          "new_y",
+          "reason",
+          "applied_by",
+          "applied_at"
+        ],
+        "title": "CoordinateCorrectionOut"
+      },
+      "CoverageCellEvidence": {
+        "properties": {
+          "cell": {
+            "$ref": "#/components/schemas/CoverageCellOut"
+          },
+          "map_version": {
+            "type": "integer",
+            "title": "Map Version"
+          },
+          "events": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cell",
+          "map_version",
+          "events"
+        ],
+        "title": "CoverageCellEvidence"
+      },
+      "CoverageCellList": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageCellOut"
+            },
+            "type": "array",
+            "title": "Cells"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "cells"
+        ],
+        "title": "CoverageCellList"
+      },
+      "CoverageCellOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "ix": {
+            "type": "integer",
+            "title": "Ix"
+          },
+          "iy": {
+            "type": "integer",
+            "title": "Iy"
+          },
+          "bounds": {
+            "type": "object",
+            "title": "Bounds"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "event_count": {
+            "type": "integer",
+            "title": "Event Count"
+          },
+          "error_sources": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Error Sources"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "ix",
+          "iy",
+          "bounds",
+          "state",
+          "event_count",
+          "error_sources",
+          "uncertainty"
+        ],
+        "title": "CoverageCellOut"
+      },
+      "CoverageMapOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "map_version": {
+            "type": "integer",
+            "title": "Map Version"
+          },
+          "series_key": {
+            "type": "string",
+            "title": "Series Key"
+          },
+          "run_id": {
+            "type": "integer",
+            "title": "Run Id"
+          },
+          "class_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Label"
+          },
+          "period": {
+            "type": "object",
+            "title": "Period"
+          },
+          "grid_size_m": {
+            "type": "number",
+            "title": "Grid Size M"
+          },
+          "area": {
+            "type": "object",
+            "title": "Area"
+          },
+          "cutoff": {
+            "type": "string",
+            "title": "Cutoff"
+          },
+          "calibration_hash": {
+            "type": "string",
+            "title": "Calibration Hash"
+          },
+          "propagation_version": {
+            "type": "string",
+            "title": "Propagation Version"
+          },
+          "station_coordinate_hash": {
+            "type": "string",
+            "title": "Station Coordinate Hash"
+          },
+          "superseded_by_map_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By Map Version"
+          },
+          "supersession_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supersession Reason"
+          },
+          "summary": {
+            "type": "object",
+            "title": "Summary"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "map_version",
+          "series_key",
+          "run_id",
+          "class_label",
+          "period",
+          "grid_size_m",
+          "area",
+          "cutoff",
+          "calibration_hash",
+          "propagation_version",
+          "station_coordinate_hash",
+          "superseded_by_map_version",
+          "supersession_reason",
+          "summary",
+          "created_at"
+        ],
+        "title": "CoverageMapOut"
+      },
+      "CoverageMapRequest": {
+        "properties": {
+          "class_label": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Label"
+          },
+          "period_start_at": {
+            "type": "string",
+            "title": "Period Start At"
+          },
+          "period_end_at": {
+            "type": "string",
+            "title": "Period End At"
+          },
+          "grid_size_m": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100000.0,
+                "exclusiveMinimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grid Size M"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "period_start_at",
+          "period_end_at"
+        ],
+        "title": "CoverageMapRequest"
+      },
+      "EventContextOut": {
+        "properties": {
+          "event_id": {
+            "type": "integer",
+            "title": "Event Id"
+          },
+          "run_id": {
+            "type": "integer",
+            "title": "Run Id"
+          },
+          "propagation": {
+            "type": "object",
+            "title": "Propagation"
+          },
+          "geometry": {
+            "type": "object",
+            "title": "Geometry"
+          },
+          "reliability": {
+            "type": "object",
+            "title": "Reliability"
+          },
+          "stations": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Stations"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_id",
+          "run_id",
+          "propagation",
+          "geometry",
+          "reliability",
+          "stations",
+          "created_at"
+        ],
+        "title": "EventContextOut"
       },
       "EventDetail": {
         "properties": {
@@ -3145,6 +4022,135 @@
         ],
         "title": "ProgressUpload"
       },
+      "PropagationProfileCreate": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Version"
+          },
+          "speed_mps": {
+            "type": "number",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 1.0,
+            "title": "Speed Mps"
+          },
+          "valid_from_at": {
+            "type": "string",
+            "title": "Valid From At"
+          },
+          "valid_to_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid To At"
+          },
+          "approved": {
+            "type": "boolean",
+            "title": "Approved",
+            "default": true
+          },
+          "approved_by": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Approved By",
+            "default": "investigator"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "speed_mps",
+          "valid_from_at"
+        ],
+        "title": "PropagationProfileCreate"
+      },
+      "PropagationProfileOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "speed_mps": {
+            "type": "number",
+            "title": "Speed Mps"
+          },
+          "valid_from_at": {
+            "type": "string",
+            "title": "Valid From At"
+          },
+          "valid_to_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid To At"
+          },
+          "approved": {
+            "type": "boolean",
+            "title": "Approved"
+          },
+          "approved_by": {
+            "type": "string",
+            "title": "Approved By"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "version",
+          "speed_mps",
+          "valid_from_at",
+          "valid_to_at",
+          "approved",
+          "approved_by",
+          "note",
+          "created_at"
+        ],
+        "title": "PropagationProfileOut"
+      },
       "RegionOut": {
         "properties": {
           "region_id": {
@@ -3527,6 +4533,18 @@
               }
             ],
             "title": "Notes"
+          },
+          "coordinate_correction_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coordinate Correction Reason"
           }
         },
         "additionalProperties": false,

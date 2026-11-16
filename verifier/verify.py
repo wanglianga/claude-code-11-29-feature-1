@@ -353,6 +353,184 @@ def check_uncalibrated_retained(truth: dict) -> Check:
     )
 
 
+# --------------------------------------------------------------------------- #
+# Observation-capability coverage publications
+# --------------------------------------------------------------------------- #
+def _get(path: str, params: dict | None = None) -> dict:
+    headers = {"X-API-Key": _api_key}
+    r = requests.get(
+        f"{events_client_base}{path}", headers=headers, params=params, timeout=30
+    )
+    r.raise_for_status()
+    return r.json()
+
+
+def check_coverage_publication(truth: dict, collinear: bool) -> list[Check]:
+    """Accept the grid/period/species capability publication independently.
+
+    Re-derived only from HTTP responses: every observed cell must name its
+    event set, carry a real uncertainty range (never a station count proxy),
+    and expose the frozen evidence context; the localizable rate must match
+    the cell tally; collinear geometry must produce no reliable cell.
+    """
+    checks: list[Check] = []
+    maps = _get("/coverage/maps")
+    if not maps:
+        return [Check("coverage map published for the run", False, "no coverage map found")]
+    latest = maps[0]
+    version = latest["map_version"]
+    summary = latest["summary"]
+    checks.append(
+        Check(
+            "coverage map covers grid, period and a species scope",
+            bool(summary.get("grid"))
+            and summary["grid"]["total_cells"] > 0
+            and latest.get("period")
+            and latest.get("class_label"),
+            f"version {version}: {summary['grid']['nx']}x{summary['grid']['ny']} grid, "
+            f"class={latest.get('class_label')}",
+        )
+    )
+    cells = _get(
+        f"/coverage/maps/{version}/cells",
+        params={"limit": 5000},
+    )["cells"]
+    valid_states = {"unobserved", "observed_not_localizable", "reliably_localized"}
+    states_ok = all(c["state"] in valid_states for c in cells)
+    tally = {s: 0 for s in valid_states}
+    for c in cells:
+        tally[c["state"]] += 1
+    observed = tally["observed_not_localizable"] + tally["reliably_localized"]
+    rate = tally["reliably_localized"] / observed if observed else None
+    rate_matches = (
+        (rate is None and summary.get("localizable_rate") is None)
+        or (rate is not None and abs(rate - summary["localizable_rate"]) < 1e-12)
+    )
+    checks.append(
+        Check(
+            "cell states are the three allowed states and the localizable rate matches the tally",
+            states_ok and rate_matches and observed > 0,
+            f"tally={tally}; recomputed rate={rate}, published={summary.get('localizable_rate')}",
+        )
+    )
+
+    range_problems: list[str] = []
+    context_problems: list[str] = []
+    invariant_problems: list[str] = []
+    for cell in cells:
+        if cell["state"] == "unobserved":
+            if cell["event_count"] != 0 or cell["uncertainty"] is not None:
+                range_problems.append(f"cell {cell['ix']},{cell['iy']} unobserved but carries evidence")
+            continue
+        u = cell.get("uncertainty") or {}
+        grid_part = u.get("grid_feasible_region") or {}
+        analytic = u.get("analytic") or {}
+        if (
+            grid_part.get("method") != "coarse_to_fine_grid_search"
+            or analytic.get("method") != "analytic_jacobian_covariance"
+            or not grid_part.get("bounds")
+        ):
+            range_problems.append(
+                f"cell {cell['ix']},{cell['iy']} missing a real uncertainty range"
+            )
+        evidence = _get(
+            f"/coverage/maps/{version}/cells/{cell['ix']}/{cell['iy']}/evidence"
+        )
+        if not evidence["events"]:
+            context_problems.append(f"cell {cell['ix']},{cell['iy']} has no event set")
+            continue
+        for entry in evidence["events"]:
+            ctx = entry.get("frozen_context") or {}
+            stations = ctx.get("stations") or []
+            if (
+                not stations
+                or "coordinates" not in stations[0]
+                or "timing_residual_us" not in stations[0]
+                or "sensitivity" not in stations[0]
+                or "downtime" not in stations[0]
+                or "version" not in (ctx.get("propagation") or {})
+            ):
+                context_problems.append(
+                    f"event {entry.get('event_id')} freezes coordinates/residual/sensitivity/downtime/propagation"
+                )
+                break
+            reliability = ctx.get("reliability") or {}
+            # Contribution label must agree with the frozen verdict.
+            if entry["contribution"] == "reliably_localized":
+                if not reliability.get("reliable") or reliability.get("conclusion_level") != "point":
+                    invariant_problems.append(
+                        f"cell {cell['ix']},{cell['iy']} event {entry['event_id']} "
+                        "marked reliable without a point-level frozen verdict"
+                    )
+            elif reliability.get("reliable") is not False:
+                invariant_problems.append(
+                    f"cell {cell['ix']},{cell['iy']} event {entry['event_id']} "
+                    "contribution/verdict mismatch"
+                )
+            # Stale propagation can never support a reliable cell.
+            if ctx.get("propagation", {}).get("stale") and cell["state"] == "reliably_localized":
+                invariant_problems.append(
+                    f"cell {cell['ix']},{cell['iy']} is reliable despite stale propagation "
+                    f"on event {entry['event_id']}"
+                )
+            # The map and the frozen event must name the same propagation version.
+            if ctx.get("propagation", {}).get("version") != latest.get("propagation_version"):
+                invariant_problems.append(
+                    f"event {entry['event_id']} propagation version disagrees with the map"
+                )
+            # Fewer than three effective stations can only give direction level.
+            if len(stations) < 3 and reliability.get("conclusion_level") != "direction":
+                invariant_problems.append(
+                    f"event {entry['event_id']} has {len(stations)} stations but level "
+                    f"is {reliability.get('conclusion_level')}, expected direction"
+                )
+    checks.append(
+        Check(
+            "every observed cell publishes an uncertainty range, never a station-count proxy",
+            not range_problems,
+            "; ".join(range_problems[:3]) or f"{observed} observed cells each carry grid + analytic ranges",
+        )
+    )
+    checks.append(
+        Check(
+            "each grid conclusion traces to frozen per-event evidence",
+            not context_problems,
+            "; ".join(context_problems[:3])
+            or "all cell evidence links resolve a full EventContextSnapshot",
+        )
+    )
+    checks.append(
+        Check(
+            "cell contributions, staleness, station-count and version invariants hold",
+            not invariant_problems,
+            "; ".join(invariant_problems[:3])
+            or "reliable cells are point-level, fresh, >=3 stations and share the map's propagation version",
+        )
+    )
+    if collinear:
+        bad = [
+            c for c in cells
+            if c["state"] == "reliably_localized"
+        ]
+        mirror = [
+            c for c in cells
+            if c["state"] == "observed_not_localizable"
+            and (c.get("uncertainty") or {}).get("grid_feasible_region", {}).get("region_count", 0) >= 2
+            and any(
+                e.get("code") == "stations_collinear" for e in c.get("error_sources", [])
+            )
+        ]
+        checks.append(
+            Check(
+                "collinear geometry yields no reliable cell and mirror ambiguity is the recorded error source",
+                not bad and bool(mirror),
+                f"{len(mirror)} not-localizable cells with >=2 regions and stations_collinear; "
+                f"{len(bad)} reliable cells (must be 0)",
+            )
+        )
+    return checks
+
+
 def check_revisions(truth: dict) -> tuple[list[Check], dict]:
     base = events_client_base
     headers = {"X-API-Key": _api_key}
@@ -437,6 +615,7 @@ def run_checks(
                 "all 'certain' events have a bounding box <= 250 m",
             )
         )
+    checks.extend(check_coverage_publication(truth, collinear))
     print(f"\n=== Verification: {scenario} ({truth['title']}) ===")
     for check in checks:
         print(" ", check)

@@ -10,6 +10,7 @@ parameters from two different snapshots.
 
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 import math
@@ -20,19 +21,22 @@ from typing import Callable
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from . import association, calibration as calib, solver
+from . import association, calibration as calib, coverage, propagation, solver
 from .config import Area, Settings, settings as global_settings
+from .covariance import classify_reliability
 from .localize import StationPoint
 from .models import (
     AuditLog,
     CalibrationModel,
     CalibrationSourceRecord,
     Event,
+    EventContextSnapshot,
     EventExclusion,
     EventObservation,
     EventRevisionLink,
     Observation,
     ProcessingRun,
+    PropagationProfile,
     SoundClass,
     Station,
     StationExclusion,
@@ -123,7 +127,7 @@ def _set_phase(ctx: PipelineContext, phase: str, status: str = "running") -> Non
 # Anchors & calibration
 # --------------------------------------------------------------------------- #
 def _load_anchor_inputs(
-    db: Session, cutoff_us: int
+    db: Session, cutoff_us: int, cfg: Settings
 ) -> tuple[list[Observation], dict[tuple[str, str], list[calib.Anchor]]]:
     """Resolve calibration observations into anchors.
 
@@ -161,7 +165,7 @@ def _load_anchor_inputs(
             )
             continue
         delay = math.hypot(st.x - src.x, st.y - src.y) / (
-            global_settings.propagation_speed_mps
+            cfg.propagation_speed_mps
         ) * 1_000_000.0
         anchor = calib.Anchor(
             observation_id=obs.id,
@@ -179,7 +183,7 @@ def calibrate_all(
     db: Session, cutoff_us: int, cfg: Settings
 ) -> tuple[dict, dict[tuple[str, str], CalibrationModel]]:
     cfg_kw = cfg
-    _resolved, grouped = _load_anchor_inputs(db, cutoff_us)
+    _resolved, grouped = _load_anchor_inputs(db, cutoff_us, cfg_kw)
     models: dict[tuple[str, str], CalibrationModel] = {}
     snapshot: dict[str, dict] = {}
     boots: set[tuple[str, str]] = set()
@@ -703,6 +707,31 @@ def execute_run(
     run.started_at_us = run.started_at_us or now_us()
     db.flush()
     checkpoint = dict(run.checkpoint_json or {})
+    # Freeze one approved propagation profile for the whole run before any
+    # calibration or localization uses a speed.  On resume the checkpointed
+    # profile is reused, so later profile approvals cannot blend into it.
+    if "propagation" not in checkpoint:
+        resolved_profile = propagation.resolve_profile_for_run(
+            db, run.cutoff_us, cfg
+        )
+        checkpoint["propagation"] = {
+            "profile_id": resolved_profile.profile.id,
+            "version": resolved_profile.profile.version,
+            "speed_mps": resolved_profile.profile.speed_mps,
+            "fallback_stale": resolved_profile.fallback_stale,
+        }
+        _save_checkpoint(run, checkpoint)
+    profile_cp = checkpoint["propagation"]
+    cfg = dataclasses.replace(
+        cfg, propagation_speed_mps=float(profile_cp["speed_mps"])
+    )
+    run.params_json = {
+        **run.params_json,
+        "propagation_speed_mps": profile_cp["speed_mps"],
+        "propagation_profile": profile_cp,
+    }
+    profile_row = db.get(PropagationProfile, profile_cp["profile_id"])
+    fallback_stale = bool(profile_cp["fallback_stale"])
     paused_phases = set(checkpoint.get("paused", []))
     area = _area_from_params(run.params_json)
     ctx = PipelineContext(
@@ -931,7 +960,8 @@ def execute_run(
         if not checkpoint.get("finalize"):
             _set_phase(ctx, "finalize")
             created = _materialize_events(
-                db, run, cand_set, finalization_by_candidate, pm, collected, cfg, checkpoint
+                db, run, cand_set, finalization_by_candidate, pm, collected, cfg, checkpoint,
+                profile_row=profile_row, fallback_stale=fallback_stale, area=area,
             )
             checkpoint["finalize"] = {"event_ids": created}
             _save_checkpoint(run, checkpoint)
@@ -940,6 +970,8 @@ def execute_run(
                 "events_created": len(created),
                 "event_ids": created,
                 "calibration_hash": run.calibration_hash,
+                "propagation_version": checkpoint["propagation"]["version"],
+                "coverage_map_versions": checkpoint.get("coverage_map_versions", []),
                 "skipped_uncalibrated": collected.skipped_uncalibrated,
                 "observations_considered": len(collected.observations),
                 "candidate_notes": cand_set.notes,
@@ -1075,6 +1107,10 @@ def _materialize_events(
     collected: Collected,
     cfg: Settings,
     checkpoint: dict,
+    *,
+    profile_row: PropagationProfile,
+    fallback_stale: bool,
+    area: Area,
 ) -> list[int]:
     options = (run.run_options_json or {}).get("options", [])
     selected = run.selected_option_id
@@ -1100,12 +1136,20 @@ def _materialize_events(
         state = finalization.get(cid, {"eligible": False, "status": "provisional"})
         lineage = _lineage_key(db, cand)
         version = int(lineage_versions.get(lineage, 1))
-        created.append(_create_event(db, run, cand, state, pm, collected, cfg, version))
+        created.append(
+            _create_event(
+                db, run, cand, state, pm, collected, cfg, version,
+                profile_row=profile_row, fallback_stale=fallback_stale,
+            )
+        )
         lineage_versions[lineage] = version + 1
     checkpoint["lineage_versions"] = lineage_versions
     db.flush()
     _link_revisions(db, run, created)
     db.flush()
+    # Freeze capability maps from exactly the events this run published.
+    maps = coverage.publish_for_run(db, run, created, cfg, area)
+    checkpoint["coverage_map_versions"] = [m.map_version for m in maps]
     return [e.id for e in created]
 
 
@@ -1127,6 +1171,9 @@ def _create_event(
     collected: Collected,
     cfg: Settings,
     revision: int = 1,
+    *,
+    profile_row: PropagationProfile,
+    fallback_stale: bool,
 ) -> Event:
     region = cand.localization.regions[0]
     t = now_us()
@@ -1146,6 +1193,9 @@ def _create_event(
         }
         for r in cand.localization.regions
     ]
+    propagation_stale = bool(
+        fallback_stale or propagation.profile_is_stale(profile_row, cand.window_end_us)
+    )
     event = Event(
         run_id=run.id,
         batch_id=run.batch_id,
@@ -1183,7 +1233,8 @@ def _create_event(
     )
     db.add(event)
     db.flush()
-    for oid, residual in zip(cand.observation_ids, region_residuals(cand)):
+    per_residual = dict(zip(cand.observation_ids, region_residuals(cand)))
+    for oid, residual in per_residual.items():
         obs = db.get(Observation, oid)
         model = db.get(CalibrationModel, obs.calibration_model_id) if obs.calibration_model_id else None
         db.add(
@@ -1211,7 +1262,121 @@ def _create_event(
                     created_at_us=t,
                 )
             )
+    _freeze_event_context(
+        db,
+        event=event,
+        cand=cand,
+        cfg=cfg,
+        profile_row=profile_row,
+        propagation_stale=propagation_stale,
+        pm=pm,
+        state=state,
+        per_residual=per_residual,
+        created_at=t,
+    )
     return event
+
+
+def _freeze_event_context(
+    db: Session,
+    *,
+    event: Event,
+    cand: association.Candidate,
+    cfg: Settings,
+    profile_row: PropagationProfile,
+    propagation_stale: bool,
+    pm: ProgressMap,
+    state: dict,
+    per_residual: dict[int, float],
+    created_at: int,
+) -> None:
+    """Copy every mutable input of this event into an immutable snapshot.
+
+    Later coordinate corrections, calibration revisions or profile
+    replacements change the live tables but never this row, so the coverage
+    cells derived from it remain replayable with their original evidence.
+    """
+    loc = cand.localization
+    rep_x, rep_y = event.x, event.y
+    extent = max((r.extent_m for r in loc.regions), default=0.0)
+    verdict = classify_reliability(
+        loc.station_points,
+        loc.uncertainties_us,
+        rep_x,
+        rep_y,
+        loc.speed_mps,
+        cfg=cfg,
+        geometry_collinear=bool(loc.geometry.get("collinear")),
+        region_count=len(loc.regions),
+        region_extent_m=extent,
+        propagation_stale=propagation_stale,
+    )
+    progress_by_station = {
+        p.get("station_id"): p for p in (state.get("stations") or [])
+    }
+    obs_rows = {oid: db.get(Observation, oid) for oid in cand.observation_ids}
+    obs_by_station = {
+        obs.station_id: obs for obs in obs_rows.values() if obs is not None
+    }
+    frozen_stations: list[dict] = []
+    for st, arrival_us, uncertainty_us in zip(
+        loc.station_points, loc.arrivals_us, loc.uncertainties_us
+    ):
+        station_obs = obs_by_station.get(st.id)
+        model = (
+            db.get(CalibrationModel, station_obs.calibration_model_id)
+            if station_obs is not None and station_obs.calibration_model_id
+            else None
+        )
+        residual = (
+            per_residual.get(station_obs.id, 0.0)
+            if station_obs is not None
+            else 0.0
+        )
+        progress_entry = progress_by_station.get(st.id, {})
+        frozen_stations.append(
+            {
+                "station_id": st.id,
+                "coordinates": {"x": st.x, "y": st.y},
+                "sensitivity": {"hearing_radius_m": st.hearing_radius_m},
+                "corrected_arrival_us": int(round(arrival_us)),
+                "arrival_uncertainty_us": int(round(uncertainty_us)),
+                "timing_residual_us": int(round(residual)),
+                "calibration_model_id": model.id if model else None,
+                "calibration_version_hash": model.version_hash if model else None,
+                "calibration_anchor_ids": model.anchor_ids if model else [],
+                "calibration_rms_residual_us": (
+                    model.rms_residual_us if model else None
+                ),
+                "downtime": {
+                    "mode": progress_entry.get("mode"),
+                    "settled": progress_entry.get("settled"),
+                    "progress_through": progress_entry.get("progress_through"),
+                    "reason": progress_entry.get("reason"),
+                },
+            }
+        )
+    db.add(
+        EventContextSnapshot(
+            event_id=event.id,
+            run_id=event.run_id,
+            propagation_profile_id=profile_row.id,
+            propagation_version=profile_row.version,
+            propagation_speed_mps=profile_row.speed_mps,
+            propagation_stale=propagation_stale,
+            geometry_json={
+                **loc.geometry,
+                "station_points": [
+                    {"station_id": st.id, "x": st.x, "y": st.y}
+                    for st in loc.station_points
+                ],
+            },
+            reliability_json=verdict.as_dict(cfg.covariance_sigma_k),
+            stations_json=frozen_stations,
+            created_at_us=created_at,
+        )
+    )
+    db.flush()
 
 
 def region_residuals(cand: association.Candidate) -> list[float]:

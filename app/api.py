@@ -8,22 +8,32 @@ from sqlalchemy.orm import Session
 
 from . import pipeline, schemas
 from .config import settings
+from .coverage import (
+    STATES,
+    publish_map,
+)
 from .db import Base, engine, get_db
 from .ingest import ingest_batch, ingest_progress, parse_local_us_iso
 from .models import (
     AuditLog,
     CalibrationModel,
     CalibrationSourceRecord,
+    CoverageCell,
+    CoverageCellEvent,
+    CoverageMap,
     Event,
+    EventContextSnapshot,
     EventExclusion,
     EventObservation,
     EventRevisionLink,
     Observation,
     ObservationConflict,
     ProcessingRun,
+    PropagationProfile,
     SoundClass,
     Station,
     StationBoot,
+    StationCoordinateCorrection,
     StationExclusion,
     StationProgress,
 )
@@ -82,13 +92,48 @@ def create_station(body: schemas.StationCreate, db: Session = Depends(get_db)):
     return _station_out(db, station)
 
 
-@router.put("/stations/{station_id}", response_model=schemas.StationOut, tags=["stations"], summary="Update a station")
+@router.put("/stations/{station_id}", response_model=schemas.StationOut, tags=["stations"], summary="Update a station; coordinate changes are frozen as corrections")
 def update_station(station_id: str, body: schemas.StationCreate, db: Session = Depends(get_db)):
     if station_id != body.id:
         raise HTTPException(400, "path station id and body id differ")
     station = db.get(Station, station_id)
     if not station:
         raise HTTPException(404, "station not found")
+    coords_changed = (
+        abs(station.x - body.x) > 1e-9 or abs(station.y - body.y) > 1e-9
+    )
+    if coords_changed and not (body.coordinate_correction_reason or "").strip():
+        raise HTTPException(
+            400,
+            "coordinate_correction_reason is required when changing x/y; old "
+            "coverage maps must remain replayable with the old coordinates",
+        )
+    if coords_changed:
+        correction = StationCoordinateCorrection(
+            station_id=station_id,
+            old_x=station.x,
+            old_y=station.y,
+            new_x=body.x,
+            new_y=body.y,
+            reason=body.coordinate_correction_reason.strip(),
+            applied_by="investigator",
+            applied_at_us=now_us(),
+        )
+        db.add(correction)
+        db.add(
+            AuditLog(
+                actor="investigator",
+                action="station.coordinate_correction",
+                target_type="station",
+                target_id=station_id,
+                detail={
+                    "old": [station.x, station.y],
+                    "new": [body.x, body.y],
+                    "reason": correction.reason,
+                },
+                created_at_us=now_us(),
+            )
+        )
     station.name = body.name
     station.x = body.x
     station.y = body.y
@@ -97,6 +142,38 @@ def update_station(station_id: str, body: schemas.StationCreate, db: Session = D
     station.notes = body.notes
     db.commit()
     return _station_out(db, station)
+
+
+@router.get(
+    "/stations/{station_id}/coordinate-corrections",
+    response_model=list[schemas.CoordinateCorrectionOut],
+    tags=["stations"],
+    summary="History of station coordinate corrections",
+)
+def list_coordinate_corrections(station_id: str, db: Session = Depends(get_db)):
+    if not db.get(Station, station_id):
+        raise HTTPException(404, "station not found")
+    rows = list(
+        db.execute(
+            select(StationCoordinateCorrection)
+            .where(StationCoordinateCorrection.station_id == station_id)
+            .order_by(StationCoordinateCorrection.id)
+        ).scalars()
+    )
+    return [
+        schemas.CoordinateCorrectionOut(
+            id=r.id,
+            station_id=r.station_id,
+            old_x=r.old_x,
+            old_y=r.old_y,
+            new_x=r.new_x,
+            new_y=r.new_y,
+            reason=r.reason,
+            applied_by=r.applied_by,
+            applied_at=iso(r.applied_at_us),
+        )
+        for r in rows
+    ]
 
 
 def _station_out(db: Session, station: Station) -> schemas.StationOut:
@@ -1089,4 +1166,362 @@ def stats(db: Session = Depends(get_db)):
         runs=runs,
         events=events,
         latest_run=_run_out(latest) if latest else None,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Propagation profiles (approved parameter intervals)
+# --------------------------------------------------------------------------- #
+@router.post(
+    "/propagation-profiles",
+    response_model=schemas.PropagationProfileOut,
+    status_code=201,
+    tags=["configuration"],
+    summary="Approve a versioned propagation parameter set with a validity interval",
+)
+def create_propagation_profile(body: schemas.PropagationProfileCreate, db: Session = Depends(get_db)):
+    if db.execute(
+        select(PropagationProfile).where(PropagationProfile.version == body.version)
+    ).scalar_one_or_none():
+        raise HTTPException(409, f"propagation profile {body.version} already exists")
+    valid_from = to_us(body.valid_from_at)
+    valid_to = to_us(body.valid_to_at) if body.valid_to_at else None
+    if valid_to is not None and valid_to <= valid_from:
+        raise HTTPException(400, "valid_to_at must be after valid_from_at")
+    row = PropagationProfile(
+        version=body.version,
+        speed_mps=body.speed_mps,
+        valid_from_us=valid_from,
+        valid_to_us=valid_to,
+        approved=body.approved,
+        approved_by=body.approved_by,
+        note=body.note,
+        created_at_us=now_us(),
+    )
+    db.add(row)
+    db.add(
+        AuditLog(
+            actor=body.approved_by,
+            action="propagation_profile.approve",
+            target_type="propagation_profile",
+            target_id=body.version,
+            detail={"speed_mps": body.speed_mps, "valid_from": body.valid_from_at},
+            created_at_us=now_us(),
+        )
+    )
+    db.commit()
+    return _propagation_out(row)
+
+
+@router.get(
+    "/propagation-profiles",
+    response_model=list[schemas.PropagationProfileOut],
+    tags=["configuration"],
+    summary="List approved propagation parameter sets",
+)
+def list_propagation_profiles(db: Session = Depends(get_db)):
+    rows = list(
+        db.execute(select(PropagationProfile).order_by(PropagationProfile.id)).scalars()
+    )
+    return [_propagation_out(r) for r in rows]
+
+
+def _propagation_out(row: PropagationProfile) -> schemas.PropagationProfileOut:
+    return schemas.PropagationProfileOut(
+        id=row.id,
+        version=row.version,
+        speed_mps=row.speed_mps,
+        valid_from_at=iso(row.valid_from_us),
+        valid_to_at=iso(row.valid_to_us),
+        approved=row.approved,
+        approved_by=row.approved_by,
+        note=row.note,
+        created_at=iso(row.created_at_us),
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Frozen event context (traceability of a coverage conclusion)
+# --------------------------------------------------------------------------- #
+def _event_context_out(snap: EventContextSnapshot) -> schemas.EventContextOut:
+    return schemas.EventContextOut(
+        event_id=snap.event_id,
+        run_id=snap.run_id,
+        propagation={
+            "profile_id": snap.propagation_profile_id,
+            "version": snap.propagation_version,
+            "speed_mps": snap.propagation_speed_mps,
+            "stale": snap.propagation_stale,
+        },
+        geometry=snap.geometry_json,
+        reliability=snap.reliability_json,
+        stations=snap.stations_json,
+        created_at=iso(snap.created_at_us),
+    )
+
+
+@router.get(
+    "/events/{event_id}/context",
+    response_model=schemas.EventContextOut,
+    tags=["events"],
+    summary="Frozen station coordinates, timing residuals, sensitivity, downtime and propagation used",
+)
+def event_context(event_id: int, db: Session = Depends(get_db)):
+    if not db.get(Event, event_id):
+        raise HTTPException(404, "event not found")
+    snap = db.execute(
+        select(EventContextSnapshot).where(
+            EventContextSnapshot.event_id == event_id
+        )
+    ).scalar_one_or_none()
+    if snap is None:
+        raise HTTPException(404, "event context snapshot missing; rerun the processing run")
+    return _event_context_out(snap)
+
+
+# --------------------------------------------------------------------------- #
+# Observation-capability coverage maps
+# --------------------------------------------------------------------------- #
+def _coverage_map_out(row: CoverageMap, db: Session) -> schemas.CoverageMapOut:
+    superseded_version = None
+    if row.superseded_by_map_id is not None:
+        target = db.get(CoverageMap, row.superseded_by_map_id)
+        superseded_version = target.map_version if target else None
+    return schemas.CoverageMapOut(
+        id=row.id,
+        map_version=row.map_version,
+        series_key=row.series_key,
+        run_id=row.run_id,
+        class_label=row.class_label,
+        period={
+            "start": iso(row.period_start_us),
+            "end": iso(row.period_end_us),
+        },
+        grid_size_m=row.grid_size_m,
+        area=row.area_json,
+        cutoff=iso(row.cutoff_us),
+        calibration_hash=row.calibration_hash,
+        propagation_version=row.propagation_version,
+        station_coordinate_hash=row.station_coordinate_hash,
+        superseded_by_map_version=superseded_version,
+        supersession_reason=row.supersession_reason,
+        summary=row.summary_json,
+        created_at=iso(row.created_at_us),
+    )
+
+
+def _coverage_cell_out(cell: CoverageCell) -> schemas.CoverageCellOut:
+    return schemas.CoverageCellOut(
+        id=cell.id,
+        ix=cell.ix,
+        iy=cell.iy,
+        bounds={
+            "x_min": cell.x_min,
+            "x_max": cell.x_max,
+            "y_min": cell.y_min,
+            "y_max": cell.y_max,
+        },
+        state=cell.state,
+        event_count=cell.event_count,
+        error_sources=cell.error_sources_json or [],
+        uncertainty=cell.uncertainty_json,
+    )
+
+
+@router.post(
+    "/coverage/maps",
+    response_model=schemas.CoverageMapOut,
+    status_code=201,
+    tags=["coverage"],
+    summary="Publish an immutable observation-capability map for a grid, period and species scope",
+)
+def create_coverage_map(body: schemas.CoverageMapRequest, db: Session = Depends(get_db)):
+    run = (
+        db.get(ProcessingRun, body.run_id)
+        if body.run_id is not None
+        else db.execute(
+            select(ProcessingRun)
+            .where(ProcessingRun.status.in_(["done", "awaiting_review", "completed"]))
+            .order_by(ProcessingRun.id.desc())
+        ).scalars().first()
+    )
+    if run is None:
+        raise HTTPException(404, "no completed processing run available to build a coverage map from")
+    period_start = to_us(body.period_start_at)
+    period_end = to_us(body.period_end_at)
+    if period_end <= period_start:
+        raise HTTPException(400, "period_end_at must be after period_start_at")
+    events = list(
+        db.execute(
+            select(Event).where(
+                Event.run_id == run.id,
+                Event.status != "superseded",
+            )
+        ).scalars()
+    )
+    if body.class_label is not None:
+        events = [e for e in events if e.class_label == body.class_label]
+    # The requested window must actually contain an event of this scope; a
+    # future or disjoint window has nothing to publish (all cells would be
+    # vacuously "unobserved", which is not a derived capability result).
+    in_window = [
+        e
+        for e in events
+        if not (e.window_end_us < period_start or e.window_start_us > period_end)
+    ]
+    if not in_window:
+        raise HTTPException(
+            404,
+            "no live events of this scope overlap the requested period in the chosen run",
+        )
+    area = pipeline._area_from_params(run.params_json)
+    new_map = publish_map(
+        db,
+        run=run,
+        area=area,
+        cfg=settings,
+        class_label=body.class_label,
+        period_start_us=period_start,
+        period_end_us=period_end,
+        grid_size_m=body.grid_size_m,
+        events=events,
+    )
+    db.commit()
+    db.refresh(new_map)
+    return _coverage_map_out(new_map, db)
+
+
+@router.get(
+    "/coverage/maps",
+    response_model=list[schemas.CoverageMapOut],
+    tags=["coverage"],
+    summary="List coverage map versions (superseded maps are hidden by default)",
+)
+def list_coverage_maps(
+    class_label: str | None = None,
+    run_id: int | None = None,
+    include_superseded: bool = False,
+    limit: int = Query(100, ge=1, le=1000),
+    db: Session = Depends(get_db),
+):
+    stmt = select(CoverageMap)
+    if class_label:
+        stmt = stmt.where(CoverageMap.class_label == class_label)
+    if run_id is not None:
+        stmt = stmt.where(CoverageMap.run_id == run_id)
+    if not include_superseded:
+        stmt = stmt.where(CoverageMap.superseded_by_map_id.is_(None))
+    rows = list(
+        db.execute(
+            stmt.order_by(CoverageMap.map_version.desc()).limit(limit)
+        ).scalars()
+    )
+    return [_coverage_map_out(r, db) for r in rows]
+
+
+@router.get(
+    "/coverage/maps/{map_version}",
+    response_model=schemas.CoverageMapOut,
+    tags=["coverage"],
+    summary="Fetch one coverage map version, including superseded ones for replay",
+)
+def get_coverage_map(map_version: int, db: Session = Depends(get_db)):
+    row = db.execute(
+        select(CoverageMap).where(CoverageMap.map_version == map_version)
+    ).scalar_one_or_none()
+    if row is None:
+        raise HTTPException(404, "coverage map version not found")
+    return _coverage_map_out(row, db)
+
+
+@router.get(
+    "/coverage/maps/{map_version}/cells",
+    response_model=schemas.CoverageCellList,
+    tags=["coverage"],
+    summary="List a map's grid cells with their observation-capability state",
+)
+def list_coverage_cells(
+    map_version: int,
+    state: str | None = None,
+    limit: int = Query(500, ge=1, le=5000),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+):
+    coverage_map = db.execute(
+        select(CoverageMap).where(CoverageMap.map_version == map_version)
+    ).scalar_one_or_none()
+    if coverage_map is None:
+        raise HTTPException(404, "coverage map version not found")
+    if state is not None and state not in STATES:
+        raise HTTPException(400, f"state must be one of {list(STATES)}")
+    stmt = select(CoverageCell).where(CoverageCell.coverage_map_id == coverage_map.id)
+    if state:
+        stmt = stmt.where(CoverageCell.state == state)
+    total = db.scalar(
+        select(func.count()).select_from(stmt.subquery())
+    ) or 0
+    rows = list(
+        db.execute(
+            stmt.order_by(CoverageCell.iy, CoverageCell.ix).offset(offset).limit(limit)
+        ).scalars()
+    )
+    return schemas.CoverageCellList(
+        total=total, cells=[_coverage_cell_out(c) for c in rows]
+    )
+
+
+@router.get(
+    "/coverage/maps/{map_version}/cells/{ix}/{iy}/evidence",
+    response_model=schemas.CoverageCellEvidence,
+    tags=["coverage"],
+    summary="Trace one cell's conclusion back to the frozen events that produced it",
+)
+def cell_evidence(map_version: int, ix: int, iy: int, db: Session = Depends(get_db)):
+    coverage_map = db.execute(
+        select(CoverageMap).where(CoverageMap.map_version == map_version)
+    ).scalar_one_or_none()
+    if coverage_map is None:
+        raise HTTPException(404, "coverage map version not found")
+    cell = db.execute(
+        select(CoverageCell).where(
+            CoverageCell.coverage_map_id == coverage_map.id,
+            CoverageCell.ix == ix,
+            CoverageCell.iy == iy,
+        )
+    ).scalar_one_or_none()
+    if cell is None:
+        raise HTTPException(404, "cell not found in this coverage map")
+    links = list(
+        db.execute(
+            select(CoverageCellEvent)
+            .where(CoverageCellEvent.coverage_cell_id == cell.id)
+            .order_by(CoverageCellEvent.id)
+        ).scalars()
+    )
+    events_out = []
+    for link in links:
+        event = db.get(Event, link.event_id)
+        snap = db.execute(
+            select(EventContextSnapshot).where(
+                EventContextSnapshot.event_id == link.event_id
+            )
+        ).scalar_one_or_none()
+        events_out.append(
+            {
+                "event_id": link.event_id,
+                "contribution": link.contribution,
+                "event_status": event.status if event else None,
+                "class_label": event.class_label if event else None,
+                "window": (
+                    {"start": iso(event.window_start_us), "end": iso(event.window_end_us)}
+                    if event
+                    else None
+                ),
+                "frozen_context": _event_context_out(snap).model_dump() if snap else None,
+            }
+        )
+    return schemas.CoverageCellEvidence(
+        cell=_coverage_cell_out(cell),
+        map_version=coverage_map.map_version,
+        events=events_out,
     )

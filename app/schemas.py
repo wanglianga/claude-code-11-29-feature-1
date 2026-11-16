@@ -30,6 +30,9 @@ class StationCreate(JsonModel):
     hearing_radius_m: float | None = Field(default=None, gt=0, le=100_000)
     active: bool = True
     notes: str | None = None
+    # Required (and stored as an immutable correction row) when a PUT changes
+    # the coordinates of an existing station.
+    coordinate_correction_reason: str | None = Field(default=None, max_length=2000)
 
 
 class StationOut(BaseModel):
@@ -386,3 +389,116 @@ class StatsSummary(BaseModel):
     runs: dict
     events: dict
     latest_run: RunOut | None
+
+
+# --------------------------------------------------------------------------- #
+# Propagation profiles
+# --------------------------------------------------------------------------- #
+class PropagationProfileCreate(JsonModel):
+    version: str = Field(min_length=1, max_length=64)
+    speed_mps: float = Field(gt=1.0, le=10_000.0)
+    valid_from_at: str
+    valid_to_at: str | None = None
+    approved: bool = True
+    approved_by: str = Field(default="investigator", min_length=1, max_length=128)
+    note: str | None = None
+
+    @field_validator("valid_from_at", "valid_to_at")
+    @classmethod
+    def _iso(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        parse_iso(v)
+        return v
+
+
+class PropagationProfileOut(BaseModel):
+    id: int
+    version: str
+    speed_mps: float
+    valid_from_at: str
+    valid_to_at: str | None
+    approved: bool
+    approved_by: str
+    note: str | None
+    created_at: str
+
+
+class CoordinateCorrectionOut(BaseModel):
+    id: int
+    station_id: str
+    old_x: float
+    old_y: float
+    new_x: float
+    new_y: float
+    reason: str
+    applied_by: str
+    applied_at: str
+
+
+# --------------------------------------------------------------------------- #
+# Observation-capability coverage maps
+# --------------------------------------------------------------------------- #
+class CoverageMapRequest(JsonModel):
+    class_label: str | None = Field(default=None, max_length=64)
+    period_start_at: str
+    period_end_at: str
+    grid_size_m: float | None = Field(default=None, gt=1.0, le=100_000.0)
+    run_id: int | None = None
+
+    @field_validator("period_start_at", "period_end_at")
+    @classmethod
+    def _iso(cls, v: str) -> str:
+        parse_iso(v)
+        return v
+
+
+class CoverageMapOut(BaseModel):
+    id: int
+    map_version: int
+    series_key: str
+    run_id: int
+    class_label: str | None
+    period: dict
+    grid_size_m: float
+    area: dict
+    cutoff: str
+    calibration_hash: str
+    propagation_version: str
+    station_coordinate_hash: str
+    superseded_by_map_version: int | None
+    supersession_reason: str | None
+    summary: dict
+    created_at: str
+
+
+class CoverageCellOut(BaseModel):
+    id: int
+    ix: int
+    iy: int
+    bounds: dict
+    state: str
+    event_count: int
+    error_sources: list[dict]
+    uncertainty: dict | None
+
+
+class CoverageCellList(BaseModel):
+    total: int
+    cells: list[CoverageCellOut]
+
+
+class CoverageCellEvidence(BaseModel):
+    cell: CoverageCellOut
+    map_version: int
+    events: list[dict]
+
+
+class EventContextOut(BaseModel):
+    event_id: int
+    run_id: int
+    propagation: dict
+    geometry: dict
+    reliability: dict
+    stations: list[dict]
+    created_at: str

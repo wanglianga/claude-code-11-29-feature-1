@@ -35,6 +35,14 @@
 | 处理中断从同一输入截止点继续，输出不混用不同校准参数 | `checkpoint_json` + `cutoff_us` + `calibration_json` | 暂停/恢复复用同一 cutoff 与校准快照；`collect` 阶段把输入快照整体冻结 |
 | 能从事件回查原观测、所用锚点、排除理由及候选区域 | `GET /events/{id}`、`/events/{id}/anchors`、`/events/{id}/observations` | 事件详情含观测、残差、校准模型、锚点 ID、候选区域单元格、排除理由、修订链接 |
 | 独立按给定声源反算到达时间检验计算 | `verifier/verify.py` | 不 import 任何服务代码，按文档化前向模型重算每条本地读数并与发布结果对比 |
+| 按网格/时段/物种发布观测能力，三态区分 | `app/coverage.py`、`/coverage/maps` | 每格只取 `unobserved` / `observed_not_localizable` / `reliably_localized` 之一；同时发布**可定位率**与真实不确定范围，绝不用站数替代误差 |
+| 到达时间模型局部导数+协方差解析传播 | `app/covariance.py` | 雅可比 `Σ=(JᵀC⁻¹J)⁻¹` 给出椭圆轴、轴向范围与条件数；退化（偏斜/共线）时显式标记，不单独充当范围 |
+| 两种不确定范围同时输出 | 事件 `regions_json` + 快照 `analytic_uncertainty` | 粗到细网格可行域（可呈多块候选区）与解析协方差范围成对发布，互相校验 |
+| 每事件冻结站点坐标/校时残差/灵敏度/停机/传播参数 | `EventContextSnapshot`、`GET /events/{id}/context` | 事件落库即复制全部易变输入；覆盖图结论可逐格回查到这些冻结行 |
+| 少于三台有效站或夹角过小只给方向/区域级结论 | `covariance.classify_reliability` | <3 站→`direction`；共线/多区域/区域过大/协方差退化/参数过期→`area`；全部通过才是 `point`；小夹角在协方差仍良态时降级为告警而非误杀 |
+| 传播参数批准区间与过期判定 | `app/propagation.py`、`/propagation-profiles` | 每次运行冻结一个批准剖面；剖面未覆盖事件窗口则事件与相关格全部带 `stale_propagation_parameters` |
+| 站点坐标更正留痕 | `StationCoordinateCorrection`、`PUT /stations/{id}` | 改坐标必须给理由，旧值留档；无理由的坐标变更被 400 拒绝 |
+| 旧覆盖图按原状态复演，新图独立编号 | `CoverageMap.superseded_by_map_id` | 地图不可变；坐标/校时/传播更正后同一系列发布新版本并注明取代原因，旧格与旧证据原样可查 |
 
 ### 时间模型（为什么不用到达时间归并）
 
@@ -119,15 +127,20 @@ PGPASSWORD=ccdev /opt/postgresql-18/bin/psql -h 127.0.0.1 -U ccdev -d postgres \
 ## 4. 验证方式（实际执行过的）
 
 ```bash
-# 1) 单元 + 集成 + 接口契约 + 独立校验器，共 59 个用例
+# 1) 单元 + 集成 + 接口契约 + 独立校验器 + 覆盖图验收，共 74 个用例
 .venv/bin/python -m pytest
-# 59 passed
+# 74 passed
 
-# 2) 五个样例场景的端到端自检（真实 HTTP 服务）
+# 2) 五个样例场景的端到端自检（真实 HTTP 服务，含覆盖图校验）
 BASE=http://127.0.0.1:8000 ./scripts/demo.sh
 
-# 说明：上面的 pytest 含 6 个由独立校验器驱动的端到端用例、5 个接口契约用例；
-# demo.sh 使用真实 uvicorn 进程 + 真实 PostgreSQL，逐个场景输出校验结论。
+# 2b) 观测能力覆盖图四条件专项自检（共线 / 离线 / 参数过期 / 坐标更正）
+.venv/bin/python scripts/demo_coverage.py \
+  --base-url http://127.0.0.1:8000 --api-key dev-api-key
+
+# 说明：上面的 pytest 含 6 个由独立校验器驱动的端到端用例、5 个接口契约用例、
+# 15 个覆盖图/协方差验收用例；demo.sh 使用真实 uvicorn 进程 + 真实 PostgreSQL，
+# 逐个场景输出校验结论，校验器对覆盖图另做 4~5 项独立检查。
 
 # 3) 单独校验某个已加载场景
 .venv/bin/python -m verifier.verify --scenario reboot \
@@ -144,11 +157,11 @@ BASE=http://127.0.0.1:8000 ./scripts/demo.sh
 
 | 场景 | 校验项 | 结果 | 关键观测 |
 | --- | --- | --- | --- |
-| `overlapping` 双声源重叠 | 8 | 全部通过 | 6 事件 × 4 台站；位置误差 7.3 m；发声时刻点估计误差 5.2 ms，真值均落在发布区间内 |
-| `reboot` 重启跳时 + 迟报 | 9 | 全部通过 | S2 的 `b1`/`b2` 各有独立有效模型（斜率 1.0000596 / 0.9999546）；S3 迟到 20 分钟后补传仍参与全部事件 |
-| `collinear` 共线站点 | 6 | 全部通过 | 每个事件返回 2 个镜像候选区域，`position.certain=false`，不报单一坐标 |
-| `duplicates` 重复补传 | 10 | 全部通过 | 整批重放 `accepted=0`；冲突记录 1 条且原文未被覆盖；事件数与记录数不变 |
-| `revision` 迟报 + 校准修订 | 11 | 全部通过 | 第二次运行校准哈希不同；旧事件 `superseded` 且由新事件 `supersedes_events` 指名；实际活动数 5 条而非叠加 |
+| `overlapping` 双声源重叠 | 13 | 全部通过 | 6 事件 × 4 台站；位置误差 7.3 m；发声时刻点估计误差 5.2 ms，真值均落在发布区间内；覆盖图可定位率 1.0 |
+| `reboot` 重启跳时 + 迟报 | 14 | 全部通过 | S2 的 `b1`/`b2` 各有独立有效模型（斜率 1.0000596 / 0.9999546）；S3 迟到 20 分钟后补传仍参与全部事件 |
+| `collinear` 共线站点 | 12 | 全部通过 | 每个事件返回 2 个镜像候选区域，`position.certain=false`；覆盖图可定位率 0.0，每格错误源含 `stations_collinear` |
+| `duplicates` 重复补传 | 15 | 全部通过 | 整批重放 `accepted=0`；冲突记录 1 条且原文未被覆盖；事件数与记录数不变 |
+| `revision` 迟报 + 校准修订 | 16 | 全部通过 | 第二次运行校准哈希不同；旧事件 `superseded` 且由新事件 `supersedes_events` 指名；实际活动数 5 条而非叠加 |
 
 独立校验器（`verifier/verify.py`）不引用 `app/` 下任何模块，按
 `arrival = emission + 距离/速度`、`local = slope_boot·arrival + intercept_boot` 从真值反算，
@@ -212,6 +225,9 @@ curl -s "$BASE/events/1/anchors" -H "$KEY" | python -m json.tool
 | `POST /runs/{id}/select {"option_id":"OPT-02"}` | 人工选定分解 |
 | `POST /runs/{id}/resume` | 从原 cutoff 续算 |
 | `GET /stats` | 总体计数 |
+| `GET /coverage/maps?include_superseded=true` | 覆盖图版本（含已被取代的旧图，可复演） |
+| `GET /coverage/maps/{v}/cells` | 逐格三态、错误来源与两套不确定范围 |
+| `GET /events/{id}/context` | 事件冻结的坐标/残差/灵敏度/停机/传播证据 |
 
 ---
 
@@ -293,6 +309,70 @@ samples/
 
 ---
 
+## 7b. 观测能力覆盖图（按网格 / 时段 / 物种）
+
+一张台站密度图回答不了"湿地里的事件能否被可靠定位"：三台近共线、关键时段失联、
+传播参数过期都会让同一声源落入很大的区域。覆盖图把观测区域划成固定网格，对
+**一个参考时段、一个物种（声类）**逐格发布三种结论之一：
+
+| 状态 | 含义 |
+| --- | --- |
+| `unobserved` | 没有任何已归并事件的可行区域触及该格 |
+| `observed_not_localizable` | 有事件覆盖该格，但没有一个事件通过全部可靠定位规则 |
+| `reliably_localized` | 至少一个覆盖该格的事件可可靠定位（点级结论） |
+
+摘要同时给出 **可定位率 `localizable_rate = 可靠格 / 有观测格`**（无观测时为
+`null`，绝不把 0/0 写成 0），以及每格的真实不确定范围——**从不以站数代替误差**。
+
+**两套不确定范围成对发布**（对应题目给出的两种方法，服务两种都输出）：
+
+1. *解析传播*（`app/covariance.py`）：在网格解处把到达时间模型线性化，用雅可比与
+   到达协方差算 `Σ=(JᵀC⁻¹J)⁻¹`，输出 k=2 椭圆半轴、轴向范围和条件数。计算便宜，
+   适合大范围逐事件计算；但它是局部高斯近似，误差偏斜或几何退化时会低估范围，
+   因此条件数超限时置 `degenerate=true` 并阻止"可靠"结论。
+2. *网格可行域*（`app/localize.py`）：对完整非线性模型做粗到细搜索，返回全部不连通
+   候选区域、面积、代表点与发声区间，保守但更贵，已随每个事件冻结。
+
+**可靠性分级**（`conclusion_level`）：
+
+- `direction`：有效站少于 3 台（或秩亏），只给方向性/区域级线索；
+- `area`：站数够，但共线、多块候选区、区域过大、解析协方差退化或传播参数过期；
+- `point`：以上问题都不存在，才声称点级可靠定位。
+- 最小夹角过小（默认 <15°）在协方差仍然良态时记为 `angle_warnings`；只有它同时
+  造成协方差退化时才升级为硬性降级原因——四台阵列里一对近线站不应否决整个阵列。
+
+**每个事件冻结一份证据上下文**（`EventContextSnapshot`，`GET /events/{id}/context`）：
+当时的站点坐标、校时模型版本与残差、灵敏度（听力半径）、停机/进度状态、批准的传播
+剖面与速度、几何与可靠性判定。覆盖格通过
+`GET /coverage/maps/{v}/cells/{ix}/{iy}/evidence` 逐格回查到这些冻结行，说明该格
+结论是怎么来的。
+
+**不可变版本与复演**：覆盖图一经发布不可改。站点坐标或校时记录补正、传播剖面更新后
+重新运行，会在同一系列（物种+网格几何）发布**独立递增编号**的新图，并把旧图标记为
+被取代（`supersession_reason` 注明 `station_coordinate_correction` /
+`timing_calibration_revision` / `propagation_parameter_update`）。旧图的格与冻结证据
+原样保留，可按原状态复演；新图独立编号，不覆盖旧结论。
+
+常用接口：
+
+| 接口 | 作用 |
+| --- | --- |
+| `POST /coverage/maps` | 按需为指定物种/时段/网格发布一张不可变覆盖图（运行结束也会自动按物种发布） |
+| `GET /coverage/maps` | 列出地图版本（默认隐藏已被取代者，`include_superseded=true` 可查旧版） |
+| `GET /coverage/maps/{version}/cells?state=...` | 逐格状态、错误来源与不确定范围 |
+| `GET /coverage/maps/{version}/cells/{ix}/{iy}/evidence` | 该格结论对应的冻结事件集与证据 |
+| `GET /events/{id}/context` | 单事件冻结的坐标/残差/灵敏度/停机/传播上下文 |
+| `POST /propagation-profiles` / `GET /propagation-profiles` | 批准带生效区间的传播参数集；过期剖面导致 `stale` 降级 |
+| `PUT /stations/{id}`（带 `coordinate_correction_reason`） | 坐标更正，旧值写入 `coordinate-corrections` 留痕 |
+
+四条件专项验收（共线、离线、参数过期、坐标更正）可一键运行：
+
+```bash
+.venv/bin/python scripts/demo_coverage.py --base-url http://127.0.0.1:8000
+```
+
+---
+
 ## 8. 目录结构
 
 ```
@@ -311,16 +391,20 @@ app/
   association.py   候选团枚举
   solver.py        互斥集合划分求解与并列检测
   pipeline.py      阶段化处理、检查点、定稿、修订
+  covariance.py    雅可比/协方差解析不确定度传播与可靠性分级（方向/区域/点）
+  propagation.py   带批准区间的传播剖面与过期判定
+  coverage.py      观测能力覆盖图发布、三态格结论、版本取代与不可变复演
 simulator/
   scenarios.py     五个虚构场景与每个 boot 的时钟模型
   run_simulator.py 真值生成、可暂停的分波上传、重放/冲突注入
 verifier/
-  verify.py        独立前向模型校验器（不引用 app/）
+  verify.py        独立前向模型校验器（不引用 app/），含覆盖图三态/证据/不变量检查
 scripts/
   demo.sh          一键演示 + 自检
+  demo_coverage.py 覆盖图四条件（共线/离线/参数过期/坐标更正）专项自检
   generate_samples.py
   export_openapi.py
-tests/             59 个用例（导入、校准、定位、关联、求解、流水线、校验器、接口契约）
+tests/             74 个用例（导入、校准、定位、关联、求解、流水线、覆盖图、校验器、接口契约）
 samples/           五个场景的真值文件
 openapi.json       导出的 OpenAPI 3.1 文档
 Dockerfile / docker-compose.yml
@@ -346,3 +430,7 @@ Dockerfile / docker-compose.yml
 | `MIN_EVENT_STATIONS` | `2` | 事件最少台站数 |
 | `MAX_SOLUTION_OPTIONS` | `5` | 并列/备选分解上限 |
 | `HEARING_RADIUS_M` / `PROGRESS_MARGIN_S` | `1600` / `120` | 定稿判定 |
+| `CAPABILITY_GRID_SIZE_M` | `250` | 覆盖图默认网格边长（米），可在发布接口逐图覆盖 |
+| `MIN_LOCALIZATION_ANGLE_DEG` | `15` | 阵列最小夹角阈值；低于它产生告警，协方差同时退化时硬性降级 |
+| `COVARIANCE_MAX_CONDITION` | `10000` | 解析定位协方差条件数上限，超过即判退化、不可靠 |
+| `COVARIANCE_SIGMA_K` | `2.0` | 发布椭圆/范围的 σ 倍数（2 ≈ 95%） |

@@ -350,3 +350,174 @@ class AuditLog(Base):
     target_id: Mapped[str | None] = mapped_column(String(64))
     detail: Mapped[dict | None] = mapped_column(JSONB)
     created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class PropagationProfile(Base):
+    """An approved, versioned set of propagation parameters.
+
+    A profile has a reference-time validity interval.  A run freezes the
+    profile approved at its cutoff; a profile that has since expired or been
+    superseded leaves every event computed with it flagged ``stale`` rather
+    than silently re-interpreted.
+    """
+
+    __tablename__ = "propagation_profiles"
+    __table_args__ = (
+        UniqueConstraint("version", name="uq_propagation_version"),
+        Index("ix_propagation_validity", "valid_from_us", "valid_to_us"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    version: Mapped[str] = mapped_column(String(64), nullable=False)
+    speed_mps: Mapped[float] = mapped_column(Float, nullable=False)
+    valid_from_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    valid_to_us: Mapped[int | None] = mapped_column(BigInteger)
+    approved: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    approved_by: Mapped[str] = mapped_column(String(128), nullable=False)
+    note: Mapped[str | None] = mapped_column(Text)
+    created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class StationCoordinateCorrection(Base):
+    """Immutable history of station coordinate corrections.
+
+    The ``stations`` row always carries the current coordinates; this table
+    keeps the previous values so a coverage map can show which coordinate
+    version each frozen event used, and so old maps replay with the old values.
+    """
+
+    __tablename__ = "station_coordinate_corrections"
+    __table_args__ = (
+        Index("ix_station_coord_corr", "station_id", "applied_at_us"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    station_id: Mapped[str] = mapped_column(ForeignKey("stations.id"), nullable=False)
+    old_x: Mapped[float] = mapped_column(Float, nullable=False)
+    old_y: Mapped[float] = mapped_column(Float, nullable=False)
+    new_x: Mapped[float] = mapped_column(Float, nullable=False)
+    new_y: Mapped[float] = mapped_column(Float, nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    applied_by: Mapped[str] = mapped_column(String(128), nullable=False)
+    applied_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class EventContextSnapshot(Base):
+    """Frozen evidence context behind one merged event.
+
+    Everything that could later change on the live configuration tables is
+    copied here at event creation: the coordinates used, the timing residuals
+    and calibration versions, the station sensitivity, the downtime/progress
+    state and the approved propagation profile.  A coverage cell's conclusion
+    is traceable to exactly these frozen rows, so coordinate or timing
+    corrections can never retroactively alter an already published map.
+    """
+
+    __tablename__ = "event_context_snapshots"
+    __table_args__ = (
+        UniqueConstraint("event_id", name="uq_event_context"),
+        Index("ix_event_context_run", "run_id"),
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id", ondelete="CASCADE"), nullable=False)
+    run_id: Mapped[int] = mapped_column(ForeignKey("processing_runs.id"), nullable=False)
+    propagation_profile_id: Mapped[int | None] = mapped_column(
+        ForeignKey("propagation_profiles.id")
+    )
+    propagation_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    propagation_speed_mps: Mapped[float] = mapped_column(Float, nullable=False)
+    propagation_stale: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    geometry_json: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    reliability_json: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    stations_json: Mapped[list] = mapped_column(JSONB, nullable=False)
+    created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class CoverageMap(Base):
+    """An immutable, independently numbered observation-capability publication.
+
+    A map covers a grid over the observation area, one reference-time period
+    and, optionally, one sound class (species).  Once published its cells
+    never change; a coordinate, timing or propagation correction produces a new
+    map with a new ``map_version`` that supersedes the old one, while the old
+    map remains available for replay exactly as first published.
+    """
+
+    __tablename__ = "coverage_maps"
+    __table_args__ = (
+        UniqueConstraint("map_version", name="uq_coverage_map_version"),
+        Index("ix_coverage_maps_scope", "class_label", "period_start_us"),
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    map_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    series_key: Mapped[str] = mapped_column(String(160), nullable=False)
+    run_id: Mapped[int] = mapped_column(ForeignKey("processing_runs.id"), nullable=False)
+    class_label: Mapped[str | None] = mapped_column(String(64))
+    period_start_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    period_end_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    grid_size_m: Mapped[float] = mapped_column(Float, nullable=False)
+    area_json: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    cutoff_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    calibration_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    propagation_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    station_coordinate_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    superseded_by_map_id: Mapped[int | None] = mapped_column(
+        ForeignKey("coverage_maps.id", ondelete="SET NULL")
+    )
+    supersession_reason: Mapped[str | None] = mapped_column(Text)
+    summary_json: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class CoverageCell(Base):
+    """One grid cell of a coverage map and its observation-capability state.
+
+    ``state`` is exactly one of ``unobserved``, ``observed_not_localizable``
+    or ``reliably_localized``.  The localizable rate is a property of the
+    whole map; a cell never substitutes a station count for an error figure.
+    """
+
+    __tablename__ = "coverage_cells"
+    __table_args__ = (
+        UniqueConstraint("coverage_map_id", "ix", "iy", name="uq_coverage_cell"),
+        Index("ix_coverage_cells_state", "coverage_map_id", "state"),
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    coverage_map_id: Mapped[int] = mapped_column(
+        ForeignKey("coverage_maps.id", ondelete="CASCADE"), nullable=False
+    )
+    ix: Mapped[int] = mapped_column(Integer, nullable=False)
+    iy: Mapped[int] = mapped_column(Integer, nullable=False)
+    x_min: Mapped[float] = mapped_column(Float, nullable=False)
+    x_max: Mapped[float] = mapped_column(Float, nullable=False)
+    y_min: Mapped[float] = mapped_column(Float, nullable=False)
+    y_max: Mapped[float] = mapped_column(Float, nullable=False)
+    state: Mapped[str] = mapped_column(String(32), nullable=False)
+    event_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # Error sources are machine-readable codes plus human-readable detail; the
+    # same block is what lets a reviewer replay why the cell got its state.
+    error_sources_json: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
+    # Best (smallest-range) evidence on the cell, null when unobserved.
+    uncertainty_json: Mapped[dict | None] = mapped_column(JSONB)
+    created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
+
+class CoverageCellEvent(Base):
+    """Traceability link: which frozen events decided a cell's conclusion."""
+
+    __tablename__ = "coverage_cell_events"
+    __table_args__ = (
+        UniqueConstraint("coverage_cell_id", "event_id", name="uq_coverage_cell_event"),
+        Index("ix_coverage_cell_event_event", "event_id"),
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    coverage_cell_id: Mapped[int] = mapped_column(
+        ForeignKey("coverage_cells.id", ondelete="CASCADE"), nullable=False
+    )
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), nullable=False)
+    contribution: Mapped[str] = mapped_column(String(32), nullable=False)
+    created_at_us: Mapped[int] = mapped_column(BigInteger, nullable=False)
